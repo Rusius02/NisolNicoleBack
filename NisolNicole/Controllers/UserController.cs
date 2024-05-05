@@ -1,5 +1,6 @@
 ﻿using Infrastructure.SqlServer.Repository.Users;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using NisolNicole.Utils;
 using NisolNicole.Utils.Dtos;
 
@@ -14,6 +15,7 @@ namespace NisolNicole.Controllers
         private readonly UseCaseCreateUser _useCaseCreateUser;
         private readonly UseCaseListUser _useCaseListUser;
         private readonly UseCaseDeleteUser _useCaseDelete;
+        private readonly IJwtAuthentificationManager _jwtAuthentificationManager;
 
         //We call the Constructor to initialize all our UseCases
         public UserController(UseCaseCreateUser useCaseCreateUser, UseCaseListUser useCaseListUser, UseCaseDeleteUser useCaseDelete, IJwtAuthentificationManager jwtAuthentificationManager)
@@ -21,6 +23,7 @@ namespace NisolNicole.Controllers
             _useCaseCreateUser = useCaseCreateUser;
             _useCaseListUser = useCaseListUser;
             _useCaseDelete = useCaseDelete;
+            _jwtAuthentificationManager = jwtAuthentificationManager;
         }
 
 
@@ -35,7 +38,27 @@ namespace NisolNicole.Controllers
             And we return the code 201 to notify that the request has been made*/
             return StatusCode(201, _useCaseCreateUser.Execute(user)); 
         }
-        
+
+        [HttpPost]
+        [Route("Login")]
+        public IActionResult Login([FromBody] InputDtoLoginUser inputDtoLoginUser)
+        {
+            // Call a service or use a use case to authenticate the user
+            UserProxy userProxy = _jwtAuthentificationManager.Authentificate(inputDtoLoginUser.Pseudo, inputDtoLoginUser.Password);
+
+            if (!userProxy.token.IsNullOrEmpty())
+            {
+                // Return the JWT token in the response
+                return Ok(new { userProxy });
+            }
+            else
+            {
+                // Return an error response if authentication fails
+                return Unauthorized();
+            }
+        }
+
+
         /*Here we have our GetAll method,
          We give it the type Get*/
         [HttpGet]
