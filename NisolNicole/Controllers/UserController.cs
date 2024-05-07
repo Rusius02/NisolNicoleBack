@@ -127,5 +127,18 @@ namespace NisolNicole.Controllers
             And we return the code 200 to notify that the request has been made*/
             return StatusCode(200, _useCaseCreateUser.Execute(inputDtoUpdateUsers)); 
         }
+
+
+        [HttpPut]
+        [ProducesResponseType(200)]
+        [Route("hashPasswords")]
+        public ActionResult<bool> hashPasswords()
+        {
+            /*We call the Execute method of our UseCase and give it a Dto.
+             And it will return an OutputDto of User.
+            And we return the code 200 to notify that the request has been made*/
+            _useCaseCreateUser.Execute();
+            return StatusCode(200);
+        }
     }
 }

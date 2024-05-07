@@ -31,6 +31,12 @@ namespace NisolNicole.Utils
             var userFromDB = _usersRepository.Update(userFromDto);
             return Mapper.GetInstance().Map<bool>(userFromDB);
         }
+        /*Method that will modify an User using an InputDTO given to it as an argument
+         and that will return a boolean to tell us if it has been modified*/
+        public void Execute()
+        {
+            _usersRepository.HashPasswordsForAllUsers();
+        }
     }
     
 }

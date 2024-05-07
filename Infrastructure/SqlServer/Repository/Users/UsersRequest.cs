@@ -46,7 +46,7 @@
         //This is the one that will send us all the activities based on Pseudo et Password
         public static readonly string ReqGetByPseudo = $@"
         SELECT * FROM {TableName}
-        WHERE {ColPseudo} = @{ColPseudo} AND {ColPassword} = @{ColPassword}";
+        WHERE {ColPseudo} = @{ColPseudo}";
             
     }
 }

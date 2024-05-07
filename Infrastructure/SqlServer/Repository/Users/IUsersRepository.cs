@@ -16,7 +16,6 @@ namespace Infrastructure.SqlServer.Repository.Users
         bool Update(Domain.Users users);
         
         Domain.Users GetUserByPseudo(string pseudo, string password);
-        
-        
+        void HashPasswordsForAllUsers();
     }
 }

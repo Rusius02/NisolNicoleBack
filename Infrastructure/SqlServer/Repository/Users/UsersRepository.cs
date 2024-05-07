@@ -1,16 +1,30 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Data.SqlTypes;
 using Infrastructure.SqlServer.Utils;
-using NotImplementedException = System.NotImplementedException;
 
 namespace Infrastructure.SqlServer.Repository.Users
 {
     public partial class UsersRepository : IUsersRepository
     {
         private readonly IDomainFactory<Domain.Users> _factory = new UsersFactory();
-        
+        private string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+        private bool UserExists(string email, string username)
+        {
+            List<Domain.Users> users = GetAll();
+
+            foreach (Domain.Users u in users)
+            {
+                if (u.mail == email || u.pseudo == username)
+                {
+                    return true; // User already exists
+                }
+            }
+
+            return false; // User does not exist
+        }
         //The Create method creates and returns an User
         public Domain.Users Create(Domain.Users user)
         {
@@ -18,6 +32,12 @@ namespace Infrastructure.SqlServer.Repository.Users
             using var connection = Database.GetConnection();
             List<Domain.Users> users = GetAll();
             connection.Open();
+            if (UserExists(user.mail, user.pseudo))
+            {
+                return null; // User already exists, return null
+            }
+            // Hash the password before storing it
+            string hashedPassword = HashPassword(user.Password);
 
             //We call our request from the UserRequest class
             var command = new SqlCommand
@@ -32,17 +52,8 @@ namespace Infrastructure.SqlServer.Repository.Users
             command.Parameters.AddWithValue("@" + ColBirthdate, user.BirthDate);
             command.Parameters.AddWithValue("@" + ColPseudo, user.pseudo);
             command.Parameters.AddWithValue("@" + ColMail, user.mail);
-            command.Parameters.AddWithValue("@" + ColPassword, user.Password);
+            command.Parameters.AddWithValue("@" + ColPassword, hashedPassword);
             
-
-            
-            //We do a check to see if the Activity exists based on pseudo, mail and password
-            foreach(Domain.Users u in users) {
-                if (u.mail==user.mail && u.pseudo==user.pseudo && u.Password == user.Password)
-                {
-                    return null;
-                }
-            }
             user.Id = (int) command.ExecuteScalar();
             
             return user;
@@ -140,25 +151,101 @@ namespace Infrastructure.SqlServer.Repository.Users
         }
 
         //The GetUserByPseudo method will return an activity based on its pseudo and password
-        public Domain.Users  GetUserByPseudo(string pseudo, string password)
+        public Domain.Users GetUserByPseudo(string pseudo, string password)
         {
-            /*We connect to our database*/
+            // Connect to the database
             using var connection = Database.GetConnection();
             connection.Open();
 
-            //We call our request from the UserRequest class
+            // Prepare SQL command to retrieve the user by username
             var command = new SqlCommand
             {
                 Connection = connection,
                 CommandText = ReqGetByPseudo
             };
 
-            /*We pass the received data as an argument in our request*/
+            // Set parameters for the SQL command
             command.Parameters.AddWithValue("@" + ColPseudo, pseudo);
-            command.Parameters.AddWithValue("@" + ColPassword, password);
-            
+
+            // Execute SQL command and retrieve the user's data
             var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
-            return reader.Read() ? _factory.CreateFromSqlReader(reader) : null;
+
+            if (reader.Read())
+            {
+                // If user found, retrieve hashed password from the database
+                string hashedPasswordFromDb = reader["password"].ToString();
+
+                // Verify if the given password matches the hashed password from the database
+                if (BCrypt.Net.BCrypt.Verify(password, hashedPasswordFromDb))
+                {
+                    // Passwords match, return the user
+                    return _factory.CreateFromSqlReader(reader);
+                }
+            }
+
+            // If user not found or passwords do not match, return null
+            return null;
         }
+
+
+
+        public void HashPasswordsForAllUsers()
+        {
+            // Connect to the database
+            using var connection = Database.GetConnection();
+            connection.Open();
+
+            // Retrieve all user records from the database
+            var selectCommand = new SqlCommand
+            {
+                Connection = connection,
+                CommandText = "SELECT idUser, Password FROM Users"
+            };
+
+            var reader = selectCommand.ExecuteReader();
+
+            while (reader.Read())
+            {
+                // Retrieve user information
+                int userId = (int)reader["idUser"];
+                string currentPassword = reader["Password"].ToString();
+
+                // Check if the current password is already hashed
+                if (!IsHashedPassword(currentPassword))
+                {
+                    // Close the existing DataReader before executing the update command
+                    reader.Close();
+
+                    // Hash the current password using bcrypt
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(currentPassword, BCrypt.Net.BCrypt.GenerateSalt());
+
+                    // Update the user record in the database with the hashed password
+                    var updateCommand = new SqlCommand
+                    {
+                        Connection = connection,
+                        CommandText = "UPDATE Users SET Password = @HashedPassword WHERE idUser = @UserId"
+                    };
+
+                    updateCommand.Parameters.AddWithValue("@HashedPassword", hashedPassword);
+                    updateCommand.Parameters.AddWithValue("@UserId", userId);
+
+                    updateCommand.ExecuteNonQuery();
+
+                    // Re-execute the select command to continue reading user records
+                    reader = selectCommand.ExecuteReader();
+                }
+            }
+
+            // Close the DataReader after processing
+            reader.Close();
+        }
+
+        // Method to check if a password is already hashed
+        private bool IsHashedPassword(string password)
+        {
+            // Check if the password starts with the bcrypt identifier
+            return password.StartsWith("$2a$");
+        }
+
     }
 }

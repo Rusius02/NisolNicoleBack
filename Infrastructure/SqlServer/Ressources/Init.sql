@@ -11,7 +11,7 @@ CREATE TABLE users(
       birthdate date not null,
       mail varchar(60) not null,
       pseudo varchar (60) not null,
-      password varchar(20) not null,
+      password varchar(500) not null,
       role varchar(20) default 'user',
       imageProfil varchar (500)
 );      
