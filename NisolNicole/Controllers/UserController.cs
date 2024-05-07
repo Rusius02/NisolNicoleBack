@@ -40,6 +40,25 @@ namespace NisolNicole.Controllers
         }
 
         [HttpPost]
+        [Route("SignIn")]
+        public ActionResult SignIn([FromBody] InputDtoCreateUsers user)
+        {
+            _useCaseCreateUser.Execute(user);
+            // Call a service or use a use case to authenticate the user
+            UserProxy userProxy = _jwtAuthentificationManager.Authentificate(user.Pseudo, user.Password);
+            if (!userProxy.token.IsNullOrEmpty())
+            {
+                // Return the JWT token in the response
+                return Ok(new { userProxy });
+            }
+            else
+            {
+                // Return an error response if authentication fails
+                return Unauthorized();
+            }
+        }
+
+        [HttpPost]
         [Route("Login")]
         public IActionResult Login([FromBody] InputDtoLoginUser inputDtoLoginUser)
         {
