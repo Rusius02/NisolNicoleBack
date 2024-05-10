@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Infrastructure.SqlServer.Utils;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace Infrastructure.SqlServer.Repository.Books
@@ -7,19 +8,17 @@ namespace Infrastructure.SqlServer.Repository.Books
     public partial class BookRepository : IBookRepository
     {
         private readonly IDomainFactory<Book> _factory = new BookFactory();
-        Book IBookRepository.Create(Book book)
+        public Book Create(Book book)
         {
             /*We connect to our database*/
             using var connection = Database.GetConnection();
-            List<Book> users = GetAll();
-            connection.Open();
-            if (UserExists(user.mail, user.pseudo))
+            List<Book> books = GetAll();
+            connection.Open(); 
+            if (BookExists(book.ISBN))
             {
                 return null; // User already exists, return null
             }
-            // Hash the password before storing it
-            string hashedPassword = HashPassword(user.Password);
-
+            
             //We call our request from the UserRequest class
             var command = new SqlCommand
             {
@@ -27,37 +26,112 @@ namespace Infrastructure.SqlServer.Repository.Books
                 CommandText = ReqCreate
             };
             /*We pass the received data as an argument in our request*/
-            command.Parameters.AddWithValue("@" + ColLastName, user.LastName);
-            command.Parameters.AddWithValue("@" + ColFirstName, user.FirstName);
-            command.Parameters.AddWithValue("@" + ColSexe, user.sexe);
-            command.Parameters.AddWithValue("@" + ColBirthdate, user.BirthDate);
-            command.Parameters.AddWithValue("@" + ColPseudo, user.pseudo);
-            command.Parameters.AddWithValue("@" + ColMail, user.mail);
-            command.Parameters.AddWithValue("@" + ColPassword, hashedPassword);
+            command.Parameters.AddWithValue("@" + ColName, book.Name);
+            command.Parameters.AddWithValue("@" + ColDescription, book.Description);
+            command.Parameters.AddWithValue("@" + ColISBN, book.ISBN);
+            command.Parameters.AddWithValue("@" + ColPrice, book.Price);
 
-            user.Id = (int)command.ExecuteScalar();
+            book.Id = (int)command.ExecuteScalar();
 
-            return user;
+            return book;
         }
 
-        bool IBookRepository.Delete(Book book)
+        public bool Delete(Book book)
         {
-            throw new NotImplementedException();
+            /*We connect to our database*/
+            using var connection = Database.GetConnection();
+            connection.Open();
+
+            //We call our request from the UserRequest class
+            var command = new SqlCommand
+            {
+                Connection = connection,
+                CommandText = ReqDelete
+            };
+            /*We pass the received data as an argument in our request*/
+            command.Parameters.AddWithValue("@" + ColId, book.Id);
+            return command.ExecuteNonQuery() > 0;
         }
 
-        List<Book> IBookRepository.GetAll()
+        public List<Book> GetAll()
         {
-            throw new NotImplementedException();
+            var books = new List<Book>();
+            /*We connect to our database*/
+            using var connection = Database.GetConnection();
+            connection.Open();
+
+            //We call our request from the ActivityRequest class
+            var command = new SqlCommand
+            {
+                Connection = connection,
+                CommandText = ReqGetAll
+            };
+
+            var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+
+            //We get our values and add them to the List 
+            while (reader.Read())
+            {
+                books.Add(_factory.CreateFromSqlReader(reader));
+            }
+
+            return books;
         }
 
-        Book IBookRepository.GetUser(Book book)
+        public Book GetUser(Book book)
         {
-            throw new NotImplementedException();
+            /*We connect to our database*/
+            using var connection = Database.GetConnection();
+            connection.Open();
+
+            //We call our request from the SportRequest class
+            var command = new SqlCommand
+            {
+                Connection = connection,
+                CommandText = ReqGetById
+            };
+
+            /*We pass the received data as an argument in our request*/
+            command.Parameters.AddWithValue("@" + ColId, book.Id);
+
+            var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+            return reader.Read() ? _factory.CreateFromSqlReader(reader) : null;
         }
 
-        bool IBookRepository.Update(Book book)
+        public bool Update(Book book)
         {
-            throw new NotImplementedException();
+            using var connection = Database.GetConnection();
+            connection.Open();
+
+            //We call our request from the ActivityRequest class
+            var command = new SqlCommand
+            {
+                Connection = connection,
+                CommandText = ReqUpdate
+            };
+
+            /*We pass the received data as an argument in our request*/
+            command.Parameters.AddWithValue("@" + ColId, book.Id);
+            command.Parameters.AddWithValue("@" + ColName, book.Name);
+            command.Parameters.AddWithValue("@" + ColDescription, book.Description);
+            command.Parameters.AddWithValue("@" + ColISBN, book.ISBN);
+            command.Parameters.AddWithValue("@" + ColPrice, book.Price);
+            return command.ExecuteNonQuery() > 0;
+        }
+
+        private bool BookExists(string isbn)
+        {
+            List<Book> books = GetAll();
+
+            foreach (Book u in books)
+            {
+                if (u.ISBN == isbn )
+                {
+                    return true; // User already exists
+                }
+            }
+
+            return false; // User does not exist
         }
     }
 }
