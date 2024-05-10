@@ -23,7 +23,6 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <Folder Include="SqlServer\Repository\Books\" />
 	  <Folder Include="SqlServer\Repository\WritingEvents\" />
 	</ItemGroup>
 

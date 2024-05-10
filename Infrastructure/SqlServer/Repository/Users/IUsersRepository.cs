@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Infrastructure.SqlServer.Repository.Users
+﻿namespace Infrastructure.SqlServer.Repository.Users
 {
     //This is where we declare all our User Repository methods
     public interface IUsersRepository
