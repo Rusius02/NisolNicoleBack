@@ -6,7 +6,7 @@
 
         List<Domain.Book> GetAll();
 
-        Domain.Book GetUser(Domain.Book book);
+        Domain.Book GetBook(Domain.Book book);
 
         bool Delete(Domain.Book book);
 

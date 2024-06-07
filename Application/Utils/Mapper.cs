@@ -19,16 +19,18 @@ namespace Application.Utils
             var config = new MapperConfiguration(cfg =>
             {
                 // Source, Destination
-                        //User
-                        cfg.CreateMap<InputDtoCreateUsers, Users>();
-                        cfg.CreateMap<Users, OutputDtoCreateUser>();
-                        cfg.CreateMap<Users, OutputDtoUser>();
-                        cfg.CreateMap<InputDtoUpdateUsers, Users>();
-                        cfg.CreateMap<InputDtoUsers, Users>();
+                //User
+                cfg.CreateMap<InputDtoCreateUsers, Users>();
+                cfg.CreateMap<Users, OutputDtoCreateUser>();
+                cfg.CreateMap<Users, OutputDtoUser>();
+                cfg.CreateMap<InputDtoUpdateUsers, Users>();
+                cfg.CreateMap<InputDtoUsers, Users>();
                 //Book
                 cfg.CreateMap<InputDtoCreateBook, Book>();
                 cfg.CreateMap<Book, OutputDtoCreateBook>();
                 cfg.CreateMap<InputDtoDeleteBook, Book>();
+                cfg.CreateMap<Book, OutputDtoBook>();
+                cfg.CreateMap<InputDtoBook, Book>();
             });
             return new AutoMapper.Mapper(config);
         }

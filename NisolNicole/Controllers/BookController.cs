@@ -13,22 +13,19 @@ namespace NisolNicole.Controllers
     {
         private readonly UseCaseCreateBook _useCaseCreateBook;
         private readonly UseCaseDeleteBook _useCaseDeleteBook;
+        private readonly UseCaseListBook _useCaseListBook;
 
-        public BookController(UseCaseCreateBook useCaseCreateBook, UseCaseDeleteBook useCaseDeleteBook)
+        public BookController(UseCaseCreateBook useCaseCreateBook, UseCaseDeleteBook useCaseDeleteBook, UseCaseListBook useCaseListBook)
         {
             _useCaseCreateBook = useCaseCreateBook;
             _useCaseDeleteBook = useCaseDeleteBook;
+            _useCaseListBook = useCaseListBook;
         }
 
-        /*Here we have our Create method,
-        We give it the type Post*/
         [HttpPost]
         [Route("Create")]
         public ActionResult<OutputDtoCreateBook> Create([FromBody] InputDtoCreateBook book)
         {
-            /*We call the Execute method of our UseCase and give it a Dto.
-             And it will return an OutputDto of Comment.
-            And we return the code 201 to notify that the request has been made*/
             return StatusCode(201, _useCaseCreateBook.Execute(book));
         }
 
@@ -36,12 +33,25 @@ namespace NisolNicole.Controllers
         [ProducesResponseType(200)]
         public ActionResult<bool> Delete(int id)
         {
-            /*We call the Execute method of our UseCase and give it a Dto which returns a Boolean.
-            And we return the code 200 to notify that the request has been made*/
-            return StatusCode(200, _useCaseDeleteBook.Execute(new InputDtoDeleteBook()
+           return StatusCode(200, _useCaseDeleteBook.Execute(new InputDtoDeleteBook()
             {
                 Id = id
             }));
+        }
+        [HttpGet]
+        [Route("GetAll")]
+        [ProducesResponseType(200)]
+        public ActionResult<List<OutputDtoBook>> GetAll()
+        {
+            return StatusCode(200, _useCaseListBook.Execute());
+        }
+
+        [HttpPost]
+        [Route("GetBook")]
+        [ProducesResponseType(200)]
+        public ActionResult<OutputDtoBook> GetBook([FromBody] InputDtoBook inputDtoBook)
+        {
+            return StatusCode(200, _useCaseListBook.Execute(inputDtoBook));
         }
     }
 }

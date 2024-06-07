@@ -78,7 +78,7 @@ namespace Infrastructure.SqlServer.Repository.Books
             return books;
         }
 
-        public Book GetUser(Book book)
+        public Book GetBook(Book book)
         {
             /*We connect to our database*/
             using var connection = Database.GetConnection();

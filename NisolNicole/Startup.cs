@@ -46,6 +46,7 @@ namespace NisolNicole
             services.AddSingleton<UseCaseListUser>();
             services.AddSingleton<UseCaseCreateBook>();
             services.AddSingleton<UseCaseDeleteBook>();
+            services.AddSingleton<UseCaseListBook>();
             //Authentication
             var key = "This is my secret Test key";
             services.AddAuthentication(x =>
