@@ -1,6 +1,7 @@
 ﻿using NisolNicole.Utils.Dtos;
 using AutoMapper;
 using Domain;
+using Application.UseCases.Books.Dtos;
 
 namespace Application.Utils
 {
@@ -24,6 +25,10 @@ namespace Application.Utils
                         cfg.CreateMap<Users, OutputDtoUser>();
                         cfg.CreateMap<InputDtoUpdateUsers, Users>();
                         cfg.CreateMap<InputDtoUsers, Users>();
+                //Book
+                cfg.CreateMap<InputDtoCreateBook, Book>();
+                cfg.CreateMap<Book, OutputDtoCreateBook>();
+                cfg.CreateMap<InputDtoDeleteBook, Book>();
             });
             return new AutoMapper.Mapper(config);
         }

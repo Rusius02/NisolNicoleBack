@@ -1,22 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Infrastructure.SqlServer.Repository.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System.Text;
 using NisolNicole.Utils;
 using Microsoft.OpenApi.Models;
 using Infrastructure.SqlServer.System;
+using Application.UseCases.Books;
+using Infrastructure.SqlServer.Repository.Books;
+using Stripe;
 
 namespace NisolNicole
 {
@@ -48,10 +39,13 @@ namespace NisolNicole
             services.AddSingleton<IDatabaseManager, DatabaseManager>();
             //Add repos
             services.AddSingleton<IUsersRepository, UsersRepository>();
+            services.AddSingleton<IBookRepository, BookRepository>();
             //Addd usecases
             services.AddSingleton<UseCaseCreateUser>();
             services.AddSingleton<UseCaseDeleteUser>();
             services.AddSingleton<UseCaseListUser>();
+            services.AddSingleton<UseCaseCreateBook>();
+            services.AddSingleton<UseCaseDeleteBook>();
             //Authentication
             var key = "This is my secret Test key";
             services.AddAuthentication(x =>
@@ -71,6 +65,7 @@ namespace NisolNicole
                 };
             });
             services.AddSingleton<IJwtAuthentificationManager>(new JwtAuthentificationManager(key));
+            StripeConfiguration.ApiKey = "your_stripe_secret_key";
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

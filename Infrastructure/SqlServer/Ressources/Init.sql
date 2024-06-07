@@ -14,4 +14,15 @@ CREATE TABLE users(
       password varchar(500) not null,
       role varchar(20) default 'user',
       imageProfil varchar (500)
-);      
+);     
+IF EXISTS (SELECT * FROM sysobjects WHERE name='book' and xtype='U')
+    DROP TABLE book;
+
+
+CREATE TABLE book(
+      idBook int IDENTITY PRIMARY KEY,
+      name varchar(60) not null,
+      description varchar(5000) not null,
+      price numbers not null,
+      isbn varchar(250) not null
+);    
