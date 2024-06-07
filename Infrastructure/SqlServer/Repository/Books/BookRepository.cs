@@ -10,22 +10,19 @@ namespace Infrastructure.SqlServer.Repository.Books
         private readonly IDomainFactory<Book> _factory = new BookFactory();
         public Book Create(Book book)
         {
-            /*We connect to our database*/
             using var connection = Database.GetConnection();
             List<Book> books = GetAll();
             connection.Open(); 
             if (BookExists(book.ISBN))
             {
-                return null; // User already exists, return null
+                return null; 
             }
             
-            //We call our request from the UserRequest class
             var command = new SqlCommand
             {
                 Connection = connection,
                 CommandText = ReqCreate
             };
-            /*We pass the received data as an argument in our request*/
             command.Parameters.AddWithValue("@" + ColName, book.Name);
             command.Parameters.AddWithValue("@" + ColDescription, book.Description);
             command.Parameters.AddWithValue("@" + ColISBN, book.ISBN);
@@ -38,17 +35,14 @@ namespace Infrastructure.SqlServer.Repository.Books
 
         public bool Delete(Book book)
         {
-            /*We connect to our database*/
             using var connection = Database.GetConnection();
             connection.Open();
 
-            //We call our request from the UserRequest class
             var command = new SqlCommand
             {
                 Connection = connection,
                 CommandText = ReqDelete
             };
-            /*We pass the received data as an argument in our request*/
             command.Parameters.AddWithValue("@" + ColId, book.Id);
             return command.ExecuteNonQuery() > 0;
         }
@@ -56,11 +50,9 @@ namespace Infrastructure.SqlServer.Repository.Books
         public List<Book> GetAll()
         {
             var books = new List<Book>();
-            /*We connect to our database*/
             using var connection = Database.GetConnection();
             connection.Open();
 
-            //We call our request from the ActivityRequest class
             var command = new SqlCommand
             {
                 Connection = connection,
@@ -69,7 +61,6 @@ namespace Infrastructure.SqlServer.Repository.Books
 
             var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 
-            //We get our values and add them to the List 
             while (reader.Read())
             {
                 books.Add(_factory.CreateFromSqlReader(reader));
@@ -80,18 +71,15 @@ namespace Infrastructure.SqlServer.Repository.Books
 
         public Book GetBook(Book book)
         {
-            /*We connect to our database*/
             using var connection = Database.GetConnection();
             connection.Open();
 
-            //We call our request from the SportRequest class
             var command = new SqlCommand
             {
                 Connection = connection,
                 CommandText = ReqGetById
             };
 
-            /*We pass the received data as an argument in our request*/
             command.Parameters.AddWithValue("@" + ColId, book.Id);
 
             var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
@@ -103,14 +91,11 @@ namespace Infrastructure.SqlServer.Repository.Books
             using var connection = Database.GetConnection();
             connection.Open();
 
-            //We call our request from the ActivityRequest class
             var command = new SqlCommand
             {
                 Connection = connection,
                 CommandText = ReqUpdate
             };
-
-            /*We pass the received data as an argument in our request*/
             command.Parameters.AddWithValue("@" + ColId, book.Id);
             command.Parameters.AddWithValue("@" + ColName, book.Name);
             command.Parameters.AddWithValue("@" + ColDescription, book.Description);
@@ -127,11 +112,11 @@ namespace Infrastructure.SqlServer.Repository.Books
             {
                 if (u.ISBN == isbn )
                 {
-                    return true; // User already exists
+                    return true; 
                 }
             }
 
-            return false; // User does not exist
+            return false; 
         }
     }
 }
