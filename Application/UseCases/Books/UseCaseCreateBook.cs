@@ -1,14 +1,11 @@
 ﻿using Application.UseCases.Books.Dtos;
 using Application.Utils;
 using Infrastructure.SqlServer.Repository.Books;
-using Infrastructure.SqlServer.Repository.Users;
-using NisolNicole.Utils.Dtos;
 
 namespace Application.UseCases.Books
 {
     public class UseCaseCreateBook : IWriting<OutputDtoCreateBook, InputDtoCreateBook>
     {
-        //Initialization of our repository
         private readonly IBookRepository _bookRepository;
         public UseCaseCreateBook(IBookRepository bookRepository)
         {

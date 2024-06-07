@@ -2,19 +2,19 @@
 {
     public partial class WritingEventRepository
     {
-        public const string TableName = "WritingEvent",
-            ColId = "id_writing_event",
+        public const string TableName = "writing_event",
+            ColId = "idWritingEvent",
             ColName = "name",
-            ColTheme = "theme",
             ColDescription = "description",
+            ColTheme = "theme",
             ColStartDate = "start_date",
             ColEndDate = "end_date";
 
         public static readonly string ReqCreate = $@"
-        INSERT INTO {TableName}({ColName}, {ColTheme},{ColDescription}, 
+        INSERT INTO {TableName}({ColName},{ColDescription}, {ColTheme},
         {ColStartDate},  {ColEndDate})
         OUTPUT INSERTED.{ColId}
-        VALUES(@{ColName}, @{ColDescription}, {ColTheme}, @{ColStartDate}, @{ColEndDate})";
+        VALUES(@{ColName}, @{ColDescription}, @{ColTheme}, @{ColStartDate}, @{ColEndDate})";
 
         public static readonly string ReqGetAll = $@"
         SELECT * FROM {TableName}";

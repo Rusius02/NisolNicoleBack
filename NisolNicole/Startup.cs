@@ -8,6 +8,8 @@ using Infrastructure.SqlServer.System;
 using Application.UseCases.Books;
 using Infrastructure.SqlServer.Repository.Books;
 using Stripe;
+using Application.UseCases.WritingEvents;
+using Infrastructure.SqlServer.Repository.WritingEvents;
 
 namespace NisolNicole
 {
@@ -40,13 +42,15 @@ namespace NisolNicole
             //Add repos
             services.AddSingleton<IUsersRepository, UsersRepository>();
             services.AddSingleton<IBookRepository, BookRepository>();
-            //Addd usecases
+            services.AddSingleton<IWritingEventRepository, WritingEventRepository>();
+            //Add usecases
             services.AddSingleton<UseCaseCreateUser>();
             services.AddSingleton<UseCaseDeleteUser>();
             services.AddSingleton<UseCaseListUser>();
             services.AddSingleton<UseCaseCreateBook>();
             services.AddSingleton<UseCaseDeleteBook>();
             services.AddSingleton<UseCaseListBook>();
+            services.AddSingleton<UseCaseCreateWritingEvent>();
             //Authentication
             var key = "This is my secret Test key";
             services.AddAuthentication(x =>

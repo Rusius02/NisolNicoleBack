@@ -23,6 +23,19 @@ CREATE TABLE book(
       idBook int IDENTITY PRIMARY KEY,
       name varchar(60) not null,
       description varchar(5000) not null,
-      price numbers not null,
+      price DECIMAL(18, 2) not null,
       isbn varchar(250) not null
-);    
+);   
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='writing_event' and xtype='U')
+    DROP TABLE writing_event;
+
+
+CREATE TABLE writing_event(
+      idWritingEvent int IDENTITY PRIMARY KEY,
+      name varchar(60) not null,
+      description varchar(5000) not null,
+      theme varchar(50),
+      start_date datetime not null,
+      end_date datetime
+);   

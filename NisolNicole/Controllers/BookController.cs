@@ -1,9 +1,6 @@
 ﻿using Application.UseCases.Books;
 using Application.UseCases.Books.Dtos;
-using Infrastructure.SqlServer.Repository.Users;
 using Microsoft.AspNetCore.Mvc;
-using NisolNicole.Utils;
-using NisolNicole.Utils.Dtos;
 
 namespace NisolNicole.Controllers
 {
@@ -52,6 +49,14 @@ namespace NisolNicole.Controllers
         public ActionResult<OutputDtoBook> GetBook([FromBody] InputDtoBook inputDtoBook)
         {
             return StatusCode(200, _useCaseListBook.Execute(inputDtoBook));
+        }
+
+        [HttpPut]
+        [ProducesResponseType(200)]
+        [Route("updateBook")]
+        public ActionResult<bool> Update([FromBody] InputDtoUpdateBook inputDtoUpdateBook)
+        {
+            return StatusCode(200, _useCaseCreateBook.Execute(inputDtoUpdateBook));
         }
     }
 }

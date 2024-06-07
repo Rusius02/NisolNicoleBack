@@ -2,6 +2,7 @@
 using AutoMapper;
 using Domain;
 using Application.UseCases.Books.Dtos;
+using Application.UseCases.WritingEvents.dtos;
 
 namespace Application.Utils
 {
@@ -31,6 +32,13 @@ namespace Application.Utils
                 cfg.CreateMap<InputDtoDeleteBook, Book>();
                 cfg.CreateMap<Book, OutputDtoBook>();
                 cfg.CreateMap<InputDtoBook, Book>();
+                //Writing event
+                cfg.CreateMap<InputDtoCreateWritingEvent, WritingEvent>();
+                cfg.CreateMap<WritingEvent, OutputDtoCreateWritingEvent>();
+                cfg.CreateMap<InputDtoDeleteWritingEvent, WritingEvent>();
+                cfg.CreateMap<WritingEvent, OutputDtoWritingEvent>();
+                cfg.CreateMap<InputDtoWritingEvent, WritingEvent>();
+                cfg.CreateMap<InputDtoUpdateWritingEvent, WritingEvent>();
             });
             return new AutoMapper.Mapper(config);
         }
