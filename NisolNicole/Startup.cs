@@ -10,6 +10,9 @@ using Infrastructure.SqlServer.Repository.Books;
 using Stripe;
 using Application.UseCases.WritingEvents;
 using Infrastructure.SqlServer.Repository.WritingEvents;
+using Application.UseCases.NewFolder;
+using Infrastructure.Services.Contact;
+using NisolNicole.security.proxy;
 
 namespace NisolNicole
 {
@@ -53,6 +56,16 @@ namespace NisolNicole
             services.AddSingleton<UseCaseCreateWritingEvent>();
             services.AddSingleton<UseCaseDeleteWritingEvent>();
             services.AddSingleton<UseCaseListWritingEvent>();
+            //SMTP config
+            var emailSettings = Configuration.GetSection("EmailSettings").Get<EmailSettingProxy>();
+            services.AddSingleton<IEmailService>(new EmailService(
+                   smtpServer: emailSettings.SmtpServer,
+                   smtpPort: emailSettings.SmtpPort,
+                   smtpUser: emailSettings.SmtpUser,
+                   smtpPass: emailSettings.SmtpPass
+               ));
+
+            services.AddSingleton<UseCaseContactAuthorByMail>();
             //Authentication
             var key = "This is my secret Test key";
             services.AddAuthentication(x =>

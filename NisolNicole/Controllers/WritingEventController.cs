@@ -1,5 +1,4 @@
-﻿using Application.UseCases.Books.Dtos;
-using Application.UseCases.WritingEvents;
+﻿using Application.UseCases.WritingEvents;
 using Application.UseCases.WritingEvents.dtos;
 using Microsoft.AspNetCore.Mvc;
 
