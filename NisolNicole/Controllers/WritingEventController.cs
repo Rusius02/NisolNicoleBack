@@ -1,4 +1,5 @@
-﻿using Application.UseCases.WritingEvents;
+﻿using Application.UseCases.Books.Dtos;
+using Application.UseCases.WritingEvents;
 using Application.UseCases.WritingEvents.dtos;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +12,13 @@ namespace NisolNicole.Controllers
     {
         private readonly UseCaseCreateWritingEvent _useCaseCreateWritingEvent;
         private readonly UseCaseDeleteWritingEvent _useCaseDeleteWritingEvent;
+        private readonly UseCaseListWritingEvent _useCaseListWritingEvent;
 
-        public WritingEventController(UseCaseCreateWritingEvent useCaseCreateWritingEvent, UseCaseDeleteWritingEvent useCaseDeleteWritingEvent)
+        public WritingEventController(UseCaseCreateWritingEvent useCaseCreateWritingEvent, UseCaseDeleteWritingEvent useCaseDeleteWritingEvent, UseCaseListWritingEvent useCaseListWritingEvent)
         {
             _useCaseCreateWritingEvent = useCaseCreateWritingEvent;
             _useCaseDeleteWritingEvent = useCaseDeleteWritingEvent;
+            _useCaseListWritingEvent = useCaseListWritingEvent;
         }
 
         [HttpPost]
@@ -41,6 +44,22 @@ namespace NisolNicole.Controllers
             {
                 Id = id
             }));
+        }
+
+        [HttpGet]
+        [Route("GetAll")]
+        [ProducesResponseType(200)]
+        public ActionResult<List<OutputDtoWritingEvent>> GetAll()
+        {
+            return StatusCode(200, _useCaseListWritingEvent.Execute());
+        }
+
+        [HttpPost]
+        [Route("GetWritingEvent")]
+        [ProducesResponseType(200)]
+        public ActionResult<OutputDtoWritingEvent> GetBook([FromBody] InputDtoWritingEvent inputDtoWritingEvent)
+        {
+            return StatusCode(200, _useCaseListWritingEvent.Execute(inputDtoWritingEvent));
         }
 
     }
