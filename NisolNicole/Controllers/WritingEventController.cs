@@ -1,6 +1,4 @@
-﻿using Application.UseCases.Books;
-using Application.UseCases.Books.Dtos;
-using Application.UseCases.WritingEvents;
+﻿using Application.UseCases.WritingEvents;
 using Application.UseCases.WritingEvents.dtos;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +10,12 @@ namespace NisolNicole.Controllers
     public class WritingEventController : ControllerBase
     {
         private readonly UseCaseCreateWritingEvent _useCaseCreateWritingEvent;
+        private readonly UseCaseDeleteWritingEvent _useCaseDeleteWritingEvent;
 
-        public WritingEventController(UseCaseCreateWritingEvent useCaseCreateWritingEvent)
+        public WritingEventController(UseCaseCreateWritingEvent useCaseCreateWritingEvent, UseCaseDeleteWritingEvent useCaseDeleteWritingEvent)
         {
             _useCaseCreateWritingEvent = useCaseCreateWritingEvent;
+            _useCaseDeleteWritingEvent = useCaseDeleteWritingEvent;
         }
 
         [HttpPost]
@@ -31,6 +31,16 @@ namespace NisolNicole.Controllers
         public ActionResult<bool> Update([FromBody] InputDtoUpdateWritingEvent inputDtoUpdateWritingEvent)
         {
             return StatusCode(200, _useCaseCreateWritingEvent.Execute(inputDtoUpdateWritingEvent));
+        }
+
+        [HttpDelete]
+        [ProducesResponseType(200)]
+        public ActionResult<bool> Delete(int id)
+        {
+            return StatusCode(200, _useCaseDeleteWritingEvent.Execute(new InputDtoDeleteWritingEvent()
+            {
+                Id = id
+            }));
         }
 
     }
