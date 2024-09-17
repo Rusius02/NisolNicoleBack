@@ -17,22 +17,23 @@ namespace Infrastructure.SqlServer.Repository.Users
         public UserProxy Authentificate(string pseudo, string password)
         {
             var user = _usersRepository.GetUserByPseudo(pseudo, password);
-            var userProxy = new UserProxy {
-                id= user.Id, 
-                firstName= user.FirstName, 
-                lastName= user.LastName, 
-                pseudo= user.pseudo, 
-                role= user.Role,
-                mail= user.mail,
-                birthDate= user.BirthDate,
-                sexe= user.sexe
-            };
+            
             if (user==null)
             {
                 return null;
             }
+            var userProxy = new UserProxy
+            {
+                id = user.Id,
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                pseudo = user.pseudo,
+                role = user.Role,
+                mail = user.mail,
+                birthDate = user.BirthDate,
+                sexe = user.sexe
+            };
 
-            
             var tokenHandler=new JwtSecurityTokenHandler();
             //var tokenKey = Encoding.ASCII.GetBytes(key);
             byte[] tokenKey = GenerateRandomKeyWithMinimumSize(32); // Example key generation function

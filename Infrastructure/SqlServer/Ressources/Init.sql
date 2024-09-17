@@ -24,7 +24,8 @@ CREATE TABLE book(
       name varchar(60) not null,
       description varchar(5000) not null,
       price DECIMAL(18, 2) not null,
-      isbn varchar(250) not null
+      isbn varchar(250) not null,
+      CoverImagePath varchar(255) not null
 );   
 
 IF EXISTS (SELECT * FROM sysobjects WHERE name='writing_event' and xtype='U')

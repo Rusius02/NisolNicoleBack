@@ -7,15 +7,16 @@
             ColName = "name",
             ColDescription = "description",
             ColISBN = "ISBN",
-            ColPrice = "price";
+            ColPrice = "price",
+            ColCoverImagePath = "coverImagePath";
 
         //We have all our queries here 
         //Create query which creates a database User
         public static readonly string ReqCreate = $@"
         INSERT INTO {TableName}({ColName}, {ColDescription}, 
-        {ColISBN},  {ColPrice})
+        {ColISBN},  {ColPrice}, {ColCoverImagePath})
         OUTPUT INSERTED.{ColId}
-        VALUES(@{ColName}, @{ColDescription}, @{ColISBN}, @{ColPrice})";
+        VALUES(@{ColName}, @{ColDescription}, @{ColISBN}, @{ColPrice}, @{ColCoverImagePath})";
 
         //This is the one that will send us all the User
         public static readonly string ReqGetAll = $@"
@@ -34,7 +35,7 @@
         public static readonly string ReqUpdate = $@"
             UPDATE {TableName}
             SET {ColName} = @{ColName}, {ColDescription} = @{ColDescription}, 
-            {ColISBN} = @{ColISBN},{ColPrice} = @{ColPrice}
+            {ColISBN} = @{ColISBN},{ColPrice} = @{ColPrice}, {ColCoverImagePath} = @{ColCoverImagePath}
             WHERE {ColId} = @{ColId}";
 
         //This is the one that will send us all the activities based on Pseudo et Password

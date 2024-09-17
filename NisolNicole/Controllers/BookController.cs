@@ -21,10 +21,30 @@ namespace NisolNicole.Controllers
 
         [HttpPost]
         [Route("Create")]
-        public ActionResult<OutputDtoCreateBook> Create([FromBody] InputDtoCreateBook book)
+        public ActionResult<OutputDtoCreateBook> Create([FromForm] InputDtoCreateBook book, [FromForm] IFormFile coverImage)
         {
+            if (coverImage != null)
+            {
+                var imageFolderPath = Path.Combine("wwwroot", "images", "covers");
+                if (!Directory.Exists(imageFolderPath))
+                {
+                    Directory.CreateDirectory(imageFolderPath);
+                }
+
+                var imageFileName = Guid.NewGuid() + Path.GetExtension(coverImage.FileName);
+                var imagePath = Path.Combine(imageFolderPath, imageFileName);
+
+                using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    coverImage.CopyTo(stream);
+                }
+
+                book.CoverImagePath = "/images/covers/" + imageFileName; 
+            }
+
             return StatusCode(201, _useCaseCreateBook.Execute(book));
         }
+
 
         [HttpDelete]
         [ProducesResponseType(200)]

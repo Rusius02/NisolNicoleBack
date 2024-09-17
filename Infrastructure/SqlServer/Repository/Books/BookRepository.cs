@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Infrastructure.SqlServer.Utils;
+using Microsoft.AspNetCore.Http;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -12,12 +13,12 @@ namespace Infrastructure.SqlServer.Repository.Books
         {
             using var connection = Database.GetConnection();
             List<Book> books = GetAll();
-            connection.Open(); 
+            connection.Open();
             if (BookExists(book.ISBN))
             {
-                return null; 
+                return null;
             }
-            
+
             var command = new SqlCommand
             {
                 Connection = connection,
@@ -27,6 +28,7 @@ namespace Infrastructure.SqlServer.Repository.Books
             command.Parameters.AddWithValue("@" + ColDescription, book.Description);
             command.Parameters.AddWithValue("@" + ColISBN, book.ISBN);
             command.Parameters.AddWithValue("@" + ColPrice, book.Price);
+            command.Parameters.AddWithValue("@" + ColCoverImagePath, book.CoverImagePath);
 
             book.Id = (int)command.ExecuteScalar();
 

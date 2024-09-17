@@ -30,7 +30,11 @@ namespace NisolNicole
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v2", new OpenApiInfo { Title = "My API", Version = "v2" }); c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First()); });
+            services.AddSwaggerGen(c => 
+            {
+                c.SwaggerDoc("v2", new OpenApiInfo { Title = "My API", Version = "v2" }); c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+                c.MapType<IFormFile>(() => new OpenApiSchema { Type = "string", Format = "binary" });
+            });
             services.AddCors(options =>
             {
                 options.AddPolicy(MyOrigins1, builder =>
@@ -102,7 +106,10 @@ namespace NisolNicole
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v2/swagger.json", "My API V2"); });
+            app.UseSwaggerUI(c => 
+            {
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "API de gestion de livres v2");
+            });
 
             app.UseCors(MyOrigins1);
 
