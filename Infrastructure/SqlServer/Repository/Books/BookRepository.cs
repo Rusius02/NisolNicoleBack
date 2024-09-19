@@ -24,7 +24,7 @@ namespace Infrastructure.SqlServer.Repository.Books
                 Connection = connection,
                 CommandText = ReqCreate
             };
-            command.Parameters.AddWithValue("@" + ColName, book.Name);
+            command.Parameters.AddWithValue("@" + ColTitle, book.Title);
             command.Parameters.AddWithValue("@" + ColDescription, book.Description);
             command.Parameters.AddWithValue("@" + ColISBN, book.ISBN);
             command.Parameters.AddWithValue("@" + ColPrice, book.Price);
@@ -99,7 +99,7 @@ namespace Infrastructure.SqlServer.Repository.Books
                 CommandText = ReqUpdate
             };
             command.Parameters.AddWithValue("@" + ColId, book.Id);
-            command.Parameters.AddWithValue("@" + ColName, book.Name);
+            command.Parameters.AddWithValue("@" + ColTitle, book.Title);
             command.Parameters.AddWithValue("@" + ColDescription, book.Description);
             command.Parameters.AddWithValue("@" + ColISBN, book.ISBN);
             command.Parameters.AddWithValue("@" + ColPrice, book.Price);

@@ -10,7 +10,7 @@ namespace Infrastructure.SqlServer.Repository.Books
             return new Domain.Book()
             {
                 Id = reader.GetInt32(reader.GetOrdinal(BookRepository.ColId)),
-                Name = reader.GetString(reader.GetOrdinal(BookRepository.ColName)),
+                Title = reader.GetString(reader.GetOrdinal(BookRepository.ColTitle)),
                 Description = reader.GetString(reader.GetOrdinal(BookRepository.ColDescription)),
                 Price = (double)reader.GetDecimal(reader.GetOrdinal(BookRepository.ColPrice)),
                 ISBN = reader.GetString(reader.GetOrdinal(BookRepository.ColISBN))

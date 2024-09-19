@@ -4,7 +4,7 @@
     {
         public const string TableName = "Book",
             ColId = "idBook",
-            ColName = "name",
+            ColTitle = "name",
             ColDescription = "description",
             ColISBN = "ISBN",
             ColPrice = "price",
@@ -13,10 +13,10 @@
         //We have all our queries here 
         //Create query which creates a database User
         public static readonly string ReqCreate = $@"
-        INSERT INTO {TableName}({ColName}, {ColDescription}, 
+        INSERT INTO {TableName}({ColTitle}, {ColDescription}, 
         {ColISBN},  {ColPrice}, {ColCoverImagePath})
         OUTPUT INSERTED.{ColId}
-        VALUES(@{ColName}, @{ColDescription}, @{ColISBN}, @{ColPrice}, @{ColCoverImagePath})";
+        VALUES(@{ColTitle}, @{ColDescription}, @{ColISBN}, @{ColPrice}, @{ColCoverImagePath})";
 
         //This is the one that will send us all the User
         public static readonly string ReqGetAll = $@"
@@ -34,14 +34,14 @@
         // The Update request which allows to modify an activity in the database
         public static readonly string ReqUpdate = $@"
             UPDATE {TableName}
-            SET {ColName} = @{ColName}, {ColDescription} = @{ColDescription}, 
+            SET {ColTitle} = @{ColTitle}, {ColDescription} = @{ColDescription}, 
             {ColISBN} = @{ColISBN},{ColPrice} = @{ColPrice}, {ColCoverImagePath} = @{ColCoverImagePath}
             WHERE {ColId} = @{ColId}";
 
         //This is the one that will send us all the activities based on Pseudo et Password
         public static readonly string ReqGetByPseudo = $@"
         SELECT * FROM {TableName}
-        WHERE {ColName} = @{ColName}";
+        WHERE {ColTitle} = @{ColTitle}";
 
     }
 }
