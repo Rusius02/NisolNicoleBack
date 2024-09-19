@@ -2,13 +2,13 @@
 {
     public partial class BookRepository
     {
-        public const string TableName = "Book",
+        public const string TableName = "book",
             ColId = "idBook",
             ColTitle = "name",
             ColDescription = "description",
             ColISBN = "ISBN",
             ColPrice = "price",
-            ColCoverImagePath = "coverImagePath";
+            ColCoverImagePath = "CoverImagePath";
 
         //We have all our queries here 
         //Create query which creates a database User

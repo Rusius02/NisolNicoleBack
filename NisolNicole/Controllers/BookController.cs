@@ -47,6 +47,7 @@ namespace NisolNicole.Controllers
 
 
         [HttpDelete]
+        [Route("Delete")]
         [ProducesResponseType(200)]
         public ActionResult<bool> Delete(int id)
         {
