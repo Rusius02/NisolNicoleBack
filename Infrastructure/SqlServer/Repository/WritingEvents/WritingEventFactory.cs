@@ -13,7 +13,9 @@ namespace Infrastructure.SqlServer.Repository.WritingEvents
                 Id = reader.GetInt32(reader.GetOrdinal(WritingEventRepository.ColId)),
                 Name = reader.GetString(reader.GetOrdinal(WritingEventRepository.ColName)),
                 Description = reader.GetString(reader.GetOrdinal(WritingEventRepository.ColDescription)),
-                Theme = reader.GetString(reader.GetOrdinal(WritingEventRepository.ColTheme)),
+                Theme = reader.IsDBNull(reader.GetOrdinal(WritingEventRepository.ColTheme))
+                        ? null
+                        : reader.GetString(reader.GetOrdinal(WritingEventRepository.ColTheme)),
                 StartDate = reader.GetDateTime(reader.GetOrdinal(WritingEventRepository.ColStartDate)),
                 EndDate = reader.GetDateTime(reader.GetOrdinal(WritingEventRepository.ColEndDate)),
             };

@@ -25,7 +25,14 @@ namespace Infrastructure.SqlServer.Repository.WritingEvents
             };
             command.Parameters.AddWithValue("@" + ColName, writingEvent.Name);
             command.Parameters.AddWithValue("@" + ColDescription, writingEvent.Description);
-            command.Parameters.AddWithValue("@" + ColTheme, writingEvent.Theme);
+            if (writingEvent.Theme != null)
+            {
+                command.Parameters.AddWithValue("@" + ColTheme, writingEvent.Theme);
+            }
+            else
+            {
+                command.Parameters.AddWithValue("@" + ColTheme, DBNull.Value);
+            }
             command.Parameters.AddWithValue("@" + ColStartDate, writingEvent.StartDate);
             command.Parameters.AddWithValue("@" + ColEndDate, writingEvent.EndDate);
 
