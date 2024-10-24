@@ -37,6 +37,7 @@ namespace NisolNicole.Controllers
 
         [HttpDelete]
         [ProducesResponseType(200)]
+        [Route("Delete")]
         public ActionResult<bool> Delete(int id)
         {
             return StatusCode(200, _useCaseDeleteWritingEvent.Execute(new InputDtoDeleteWritingEvent()
