@@ -75,9 +75,27 @@ namespace NisolNicole.Controllers
         [HttpPut]
         [ProducesResponseType(200)]
         [Route("updateBook")]
-        public ActionResult<bool> Update([FromBody] InputDtoUpdateBook inputDtoUpdateBook)
+        public ActionResult<bool> Update([FromForm] InputDtoUpdateBook book, [FromForm] IFormFile? coverImage)
         {
-            return StatusCode(200, _useCaseCreateBook.Execute(inputDtoUpdateBook));
+            // Si une nouvelle image de couverture est fournie, gérer son enregistrement
+            if (coverImage != null)
+            {
+                // Sauvegarder la nouvelle image
+                var filePath = Path.Combine("wwwroot/images/covers", coverImage.FileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    coverImage.CopyTo(stream);
+                }
+
+                // Mettre à jour le chemin de l'image dans l'objet book
+                book.CoverImagePath = "/images/covers/" + coverImage.FileName;
+            }
+
+            // Exécuter le cas d'utilisation de mise à jour
+            var result = _useCaseCreateBook.Execute(book);
+
+            return StatusCode(200, result);
         }
+
     }
 }

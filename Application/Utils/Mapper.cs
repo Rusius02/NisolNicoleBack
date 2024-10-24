@@ -28,6 +28,7 @@ namespace Application.Utils
                 cfg.CreateMap<InputDtoUsers, Users>();
                 //Book
                 cfg.CreateMap<InputDtoCreateBook, Book>();
+                cfg.CreateMap<InputDtoUpdateBook, Book>();
                 cfg.CreateMap<Book, OutputDtoCreateBook>();
                 cfg.CreateMap<InputDtoDeleteBook, Book>();
                 cfg.CreateMap<Book, OutputDtoBook>();

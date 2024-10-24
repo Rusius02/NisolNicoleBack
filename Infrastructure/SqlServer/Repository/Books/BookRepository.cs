@@ -103,6 +103,7 @@ namespace Infrastructure.SqlServer.Repository.Books
             command.Parameters.AddWithValue("@" + ColDescription, book.Description);
             command.Parameters.AddWithValue("@" + ColISBN, book.ISBN);
             command.Parameters.AddWithValue("@" + ColPrice, book.Price);
+            command.Parameters.AddWithValue("@" + ColCoverImagePath, book.CoverImagePath);
             return command.ExecuteNonQuery() > 0;
         }
 

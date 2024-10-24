@@ -113,6 +113,8 @@ namespace NisolNicole
 
             app.UseCors(MyOrigins1);
 
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseAuthentication();
