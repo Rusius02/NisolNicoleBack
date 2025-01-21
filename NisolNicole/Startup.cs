@@ -13,6 +13,7 @@ using Infrastructure.SqlServer.Repository.WritingEvents;
 using Application.UseCases.NewFolder;
 using Infrastructure.Services.Contact;
 using NisolNicole.security.proxy;
+using Infrastructure.SqlServer.Repository.Orders;
 
 namespace NisolNicole
 {
@@ -48,7 +49,7 @@ namespace NisolNicole
             services.AddSingleton<IDatabaseManager, DatabaseManager>();
             //Add repos
             services.AddSingleton<IUsersRepository, UsersRepository>();
-            services.AddSingleton<IBookRepository, BookRepository>();
+            services.AddSingleton<IBookRepository, OrderRepository>();
             services.AddSingleton<IWritingEventRepository, WritingEventRepository>();
             //Add usecases
             services.AddSingleton<UseCaseCreateUser>();

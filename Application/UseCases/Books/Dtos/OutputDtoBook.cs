@@ -8,5 +8,6 @@
         public int Price { get; set; }
         public string ISBN { get; set; }
         public string CoverImagePath { get; set; }
+        public string StripeProductId { get; set; }
     }
 }

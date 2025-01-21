@@ -1,13 +1,14 @@
-﻿using Infrastructure.SqlServer.Utils;
+﻿using Infrastructure.SqlServer.Repository.Books;
+using Infrastructure.SqlServer.Utils;
 using System.Data.SqlClient;
 
-namespace Infrastructure.SqlServer.Repository.Books
+namespace Infrastructure.SqlServer.Repository.Orders
 {
-    public class BookFactory : IDomainFactory<Domain.Book>
+    public class OrderFactory : IDomainFactory<Domain.Order>
     {
-        public Domain.Book CreateFromSqlReader(SqlDataReader reader)
+        public Domain.Order CreateFromSqlReader(SqlDataReader reader)
         {
-            return new Domain.Book()
+            return new Domain.Order()
             {
                 Id = reader.GetInt32(reader.GetOrdinal(OrderRepository.ColId)),
                 Title = reader.GetString(reader.GetOrdinal(OrderRepository.ColTitle)),
