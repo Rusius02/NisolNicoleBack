@@ -20,7 +20,7 @@
 
         public string AddressCity { get; set; }
         public string AddressZip { get; set; }
-        public string AddressCounty { get; set; }
+        public string AddressCountry { get; set; }
 
     }
 }

@@ -11,16 +11,21 @@
             ColPseudo = "pseudo",
             ColPassword = "password",
             ColBirthdate = "birthdate",
-            ColRole = "role";
+            ColRole = "role",
+            ColAddressStreet = "address_street",
+            ColAddressNumber = "address_number",
+            ColAddressCity = "address_city",
+            ColAddressZip = "address_zip",
+            ColAddressCountry = "address_country";
     
         //We have all our queries here 
         //Create query which creates a database User
         public static readonly string ReqCreate = $@"
         INSERT INTO {TableName}({ColLastName}, {ColFirstName}, 
-        {ColSexe},  {ColBirthdate}, {ColPseudo},{ColMail},{ColPassword})
+        {ColSexe},  {ColBirthdate}, {ColPseudo},{ColMail},{ColPassword}, {ColAddressStreet}, {ColAddressNumber}, {ColAddressCity}, {ColAddressZip}, {ColAddressCountry})
         OUTPUT INSERTED.{ColId}
         VALUES(@{ColLastName}, @{ColFirstName}, @{ColSexe}, @{ColBirthdate}, 
-        @{ColPseudo}, @{ColMail} ,@{ColPassword})";
+        @{ColPseudo}, @{ColMail} ,@{ColPassword}, @{ColAddressStreet}, @{ColAddressNumber}, @{ColAddressCity}, @{ColAddressZip}, @{ColAddressCountry})";
 
         //This is the one that will send us all the User
         public static readonly string ReqGetAll = $@"
@@ -40,7 +45,8 @@
             UPDATE {TableName}
             SET {ColFirstName} = @{ColFirstName}, {ColLastName} = @{ColLastName}, 
             {ColSexe} = @{ColSexe},{ColBirthdate} = @{ColBirthdate}, {ColPseudo} = @{ColPseudo},
-            {ColMail} = @{ColMail}, {ColPassword} = @{ColPassword}
+            {ColMail} = @{ColMail}, {ColPassword} = @{ColPassword}, {ColAddressStreet} = @{ColAddressStreet},
+            {ColAddressNumber} = @{ColAddressNumber}, {ColAddressCity} = @{ColAddressCity}, {ColAddressZip} = @{ColAddressZip}, {ColAddressCountry} = @{ColAddressCountry}
             WHERE {ColId} = @{ColId}";
         
         //This is the one that will send us all the activities based on Pseudo et Password
