@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using Domain;
 using Infrastructure.SqlServer.Utils;
 
 namespace Infrastructure.SqlServer.Repository.Users
@@ -53,7 +54,12 @@ namespace Infrastructure.SqlServer.Repository.Users
             command.Parameters.AddWithValue("@" + ColPseudo, user.pseudo);
             command.Parameters.AddWithValue("@" + ColMail, user.mail);
             command.Parameters.AddWithValue("@" + ColPassword, hashedPassword);
-            
+            command.Parameters.AddWithValue("@" + ColAddressStreet, user.AddressStreet);
+            command.Parameters.AddWithValue("@" + ColAddressNumber, user.AddressNumber);
+            command.Parameters.AddWithValue("@" + ColAddressCity, user.AddressCity);
+            command.Parameters.AddWithValue("@" + ColAddressZip, user.AddressZip);
+            command.Parameters.AddWithValue("@" + ColAddressCountry, user.AddressCountry);
+
             user.Id = (int) command.ExecuteScalar();
             
             return user;
@@ -147,6 +153,11 @@ namespace Infrastructure.SqlServer.Repository.Users
             command.Parameters.AddWithValue("@" + ColPseudo, users.pseudo);
             command.Parameters.AddWithValue("@" + ColMail, users.mail);
             command.Parameters.AddWithValue("@" + ColPassword, users.Password);
+            command.Parameters.AddWithValue("@" + ColAddressStreet, users.AddressStreet);
+            command.Parameters.AddWithValue("@" + ColAddressNumber, users.AddressNumber);
+            command.Parameters.AddWithValue("@" + ColAddressCity, users.AddressCity);
+            command.Parameters.AddWithValue("@" + ColAddressZip, users.AddressZip);
+            command.Parameters.AddWithValue("@" + ColAddressCountry, users.AddressCountry);
             return command.ExecuteNonQuery()>0;
         }
 
