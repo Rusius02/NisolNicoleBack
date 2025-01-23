@@ -1,7 +1,6 @@
 ﻿using Application.UseCases.Orders.Dtos;
 using Application.Utils;
 using Infrastructure.SqlServer.Repository.Orders;
-using NisolNicole.Utils.Dtos;
 
 namespace Application.UseCases.Orders
 {
