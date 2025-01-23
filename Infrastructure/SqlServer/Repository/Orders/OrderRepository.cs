@@ -25,13 +25,13 @@ namespace Infrastructure.SqlServer.Repository.Orders
                 var command = new SqlCommand
                 {
                     Connection = connection,
-                    CommandText = OrderRequest.ReqCreateOrder,
+                    CommandText = ReqCreateOrder,
                     Transaction = transaction
                 };
-                command.Parameters.AddWithValue("@" + OrderRequest.ColUserId, order.UserId);
-                command.Parameters.AddWithValue("@" + OrderRequest.ColAmount, order.Amount);
-                command.Parameters.AddWithValue("@" + OrderRequest.ColPaymentStatus, order.PaymentStatus);
-                command.Parameters.AddWithValue("@" + OrderRequest.ColCreatedAt, order.CreatedAt);
+                command.Parameters.AddWithValue("@" + ColUserId, order.UserId);
+                command.Parameters.AddWithValue("@" + ColAmount, order.Amount);
+                command.Parameters.AddWithValue("@" + ColPaymentStatus, order.PaymentStatus);
+                command.Parameters.AddWithValue("@" + ColCreatedAt, order.CreatedAt);
 
                 order.OrderId = (int)command.ExecuteScalar();
 
@@ -41,11 +41,11 @@ namespace Infrastructure.SqlServer.Repository.Orders
                     var orderBooksCommand = new SqlCommand
                     {
                         Connection = connection,
-                        CommandText = OrderRequest.ReqCreateOrderBooks,
+                        CommandText = ReqCreateOrderBooks,
                         Transaction = transaction
                     };
-                    orderBooksCommand.Parameters.AddWithValue("@" + OrderRequest.ColOrderBookOrderId, order.OrderId);
-                    orderBooksCommand.Parameters.AddWithValue("@" + OrderRequest.ColOrderBookBookId, book.Id);
+                    orderBooksCommand.Parameters.AddWithValue("@" + ColOrderBookOrderId, order.OrderId);
+                    orderBooksCommand.Parameters.AddWithValue("@" + ColOrderBookBookId, book.Id);
                     orderBooksCommand.ExecuteNonQuery();
                 }
 
@@ -68,9 +68,9 @@ namespace Infrastructure.SqlServer.Repository.Orders
             var command = new SqlCommand
             {
                 Connection = connection,
-                CommandText = OrderRequest.ReqDeleteOrder
+                CommandText = ReqDeleteOrder
             };
-            command.Parameters.AddWithValue("@" + OrderRequest.ColOrderId, order.OrderId);
+            command.Parameters.AddWithValue("@" + ColOrderId, order.OrderId);
 
             return command.ExecuteNonQuery() > 0;
         }
@@ -85,7 +85,7 @@ namespace Infrastructure.SqlServer.Repository.Orders
             var command = new SqlCommand
             {
                 Connection = connection,
-                CommandText = OrderRequest.ReqGetOrdersByUserId
+                CommandText = ReqGetOrdersByUserId
             };
 
             var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
@@ -107,10 +107,10 @@ namespace Infrastructure.SqlServer.Repository.Orders
             var command = new SqlCommand
             {
                 Connection = connection,
-                CommandText = OrderRequest.ReqGetOrderById
+                CommandText = ReqGetOrderById
             };
 
-            command.Parameters.AddWithValue("@" + OrderRequest.ColOrderId, orderId);
+            command.Parameters.AddWithValue("@" + ColOrderId, orderId);
 
             var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
             return reader.Read() ? _factory.CreateFromSqlReader(reader) : null;
@@ -125,10 +125,10 @@ namespace Infrastructure.SqlServer.Repository.Orders
             var command = new SqlCommand
             {
                 Connection = connection,
-                CommandText = OrderRequest.ReqUpdatePaymentStatus
+                CommandText = ReqUpdatePaymentStatus
             };
-            command.Parameters.AddWithValue("@" + OrderRequest.ColOrderId, orderId);
-            command.Parameters.AddWithValue("@" + OrderRequest.ColPaymentStatus, paymentStatus);
+            command.Parameters.AddWithValue("@" + ColOrderId, orderId);
+            command.Parameters.AddWithValue("@" + ColPaymentStatus, paymentStatus);
 
             return command.ExecuteNonQuery() > 0;
         }
@@ -143,9 +143,9 @@ namespace Infrastructure.SqlServer.Repository.Orders
             var command = new SqlCommand
             {
                 Connection = connection,
-                CommandText = OrderRequest.ReqGetOrderBooks
+                CommandText = ReqGetOrderBooks
             };
-            command.Parameters.AddWithValue("@" + OrderRequest.ColOrderBookOrderId, orderId);
+            command.Parameters.AddWithValue("@" + ColOrderBookOrderId, orderId);
 
             var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 

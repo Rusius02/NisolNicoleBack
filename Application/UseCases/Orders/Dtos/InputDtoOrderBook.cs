@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases.Orders.Dtos
 {
-    public class OutputDtoCreateOrder
+    public class InputDtoOrderBook
     {
-        public int OrderId { get; set; }
-        public int UserId { get; set; }
-        public string StripePaymentIntentId { get; set; }
+        public int BookId { get; set; } // ID du livre
+        public int Quantity { get; set; } // Quantité commandée
     }
 }

@@ -49,7 +49,8 @@ namespace NisolNicole
             services.AddSingleton<IDatabaseManager, DatabaseManager>();
             //Add repos
             services.AddSingleton<IUsersRepository, UsersRepository>();
-            services.AddSingleton<IBookRepository, OrderRepository>();
+            services.AddSingleton<IBookRepository, BookRepository>();
+            services.AddSingleton<IOrderRepository, OrderRepository>();
             services.AddSingleton<IWritingEventRepository, WritingEventRepository>();
             //Add usecases
             services.AddSingleton<UseCaseCreateUser>();

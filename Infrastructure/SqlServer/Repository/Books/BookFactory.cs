@@ -9,12 +9,12 @@ namespace Infrastructure.SqlServer.Repository.Books
         {
             return new Domain.Book()
             {
-                Id = reader.GetInt32(reader.GetOrdinal(OrderRepository.ColId)),
-                Title = reader.GetString(reader.GetOrdinal(OrderRepository.ColTitle)),
-                Description = reader.GetString(reader.GetOrdinal(OrderRepository.ColDescription)),
-                Price = (double)reader.GetDecimal(reader.GetOrdinal(OrderRepository.ColPrice)),
-                ISBN = reader.GetString(reader.GetOrdinal(OrderRepository.ColISBN)),
-                CoverImagePath = reader.GetString(reader.GetOrdinal(OrderRepository.ColCoverImagePath))
+                Id = reader.GetInt32(reader.GetOrdinal(BookRepository.ColId)),
+                Title = reader.GetString(reader.GetOrdinal(BookRepository.ColTitle)),
+                Description = reader.GetString(reader.GetOrdinal(BookRepository.ColDescription)),
+                Price = (double)reader.GetDecimal(reader.GetOrdinal(BookRepository.ColPrice)),
+                ISBN = reader.GetString(reader.GetOrdinal(BookRepository.ColISBN)),
+                CoverImagePath = reader.GetString(reader.GetOrdinal(BookRepository.ColCoverImagePath))
             };
         }
     }

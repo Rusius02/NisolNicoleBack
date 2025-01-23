@@ -1,5 +1,6 @@
 ﻿using Infrastructure.SqlServer.Repository.Books;
 using Infrastructure.SqlServer.Utils;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace Infrastructure.SqlServer.Repository.Orders
@@ -10,12 +11,11 @@ namespace Infrastructure.SqlServer.Repository.Orders
         {
             return new Domain.Order()
             {
-                Id = reader.GetInt32(reader.GetOrdinal(OrderRepository.ColId)),
-                Title = reader.GetString(reader.GetOrdinal(OrderRepository.ColTitle)),
-                Description = reader.GetString(reader.GetOrdinal(OrderRepository.ColDescription)),
-                Price = (double)reader.GetDecimal(reader.GetOrdinal(OrderRepository.ColPrice)),
-                ISBN = reader.GetString(reader.GetOrdinal(OrderRepository.ColISBN)),
-                CoverImagePath = reader.GetString(reader.GetOrdinal(OrderRepository.ColCoverImagePath))
+                OrderId = reader.GetInt32(reader.GetOrdinal(OrderRepository.ColOrderId)),
+                UserId = reader.GetInt32(reader.GetOrdinal(OrderRepository.ColUserId)),
+                Amount = reader.GetDecimal(reader.GetOrdinal(OrderRepository.ColAmount)),
+                PaymentStatus = reader.GetString(reader.GetOrdinal(OrderRepository.ColPaymentStatus)),
+                CreatedAt = reader.GetDateTime(reader.GetOrdinal(OrderRepository.ColCreatedAt))
             };
         }
     }

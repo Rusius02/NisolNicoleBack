@@ -8,6 +8,6 @@ namespace Application.UseCases.Orders.Dtos
         public decimal Amount { get; set; }
         public string PaymentStatus { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public List<Book> OrderBooks { get; set; } = new();
+        public List<InputDtoOrderBook> OrderBooks { get; set; } = new();
     }
 }

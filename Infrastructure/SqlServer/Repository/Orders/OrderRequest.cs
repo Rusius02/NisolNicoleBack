@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Infrastructure.SqlServer.Repository.Orders
 {
-    public static class OrderRequest
+    partial class OrderRepository
     {
         // Nom de la table
         public const string TableName = "orders";

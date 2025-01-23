@@ -1,9 +1,10 @@
 ﻿namespace NisolNicole.Controllers
 {
+    using Application.UseCases.Orders.Dtos;
+    using Application.UseCases.Orders;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Stripe;
-    using Stripe.Checkout;
     using System.Threading.Tasks;
 
     [ApiController]
@@ -12,10 +13,12 @@
     public class PaymentsController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly UsecaseCreateOrder _usecaseCreateOrder;
 
-        public PaymentsController(IConfiguration configuration)
+        public PaymentsController(IConfiguration configuration, UsecaseCreateOrder usecaseCreateOrder)
         {
             _configuration = configuration;
+            _usecaseCreateOrder = usecaseCreateOrder;
         }
 
         [HttpPost("create-payment-intent")]
@@ -28,6 +31,20 @@
 
             try
             {
+                // 1. Calculate total amount and create an order in the database
+                var order = _usecaseCreateOrder.Execute(new InputDtoCreateOrder
+                {
+                    UserId = request.UserId,
+                    Amount = request.Amount / 100M, // Convert cents to dollars/euros
+                    OrderBooks = request.Books.Select(b => new InputDtoOrderBook
+                    {
+                        BookId = b.Id,
+                        Quantity = b.Quantity
+                    }).ToList(),
+                    PaymentStatus = "Pending"
+                });
+
+                // 2. Create a PaymentIntent in Stripe
                 var options = new PaymentIntentCreateOptions
                 {
                     Amount = request.Amount,
@@ -36,13 +53,21 @@
                     {
                         Enabled = true,
                     },
+                    Metadata = new Dictionary<string, string>
+            {
+                { "OrderId", order.OrderId.ToString() },
+                { "UserId", order.UserId.ToString() }
+            }
                 };
 
                 var service = new PaymentIntentService();
                 PaymentIntent paymentIntent = await service.CreateAsync(options);
 
-                // Enregistrez les informations de paiement dans la base de données si nécessaire
+                // 3. Update the order with the PaymentIntent ID
+                order.StripePaymentIntentId = paymentIntent.Id;
+                //_orderRepository.Update(order);
 
+                // 4. Return the ClientSecret to the frontend
                 return Ok(new { ClientSecret = paymentIntent.ClientSecret });
             }
             catch (StripeException ex)
@@ -50,6 +75,7 @@
                 return StatusCode(500, new { Error = ex.Message });
             }
         }
+
 
         [HttpPost("webhook")]
         public async Task<IActionResult> StripeWebhook()
@@ -84,10 +110,17 @@
             }
         }
     }
-
     public class CreatePaymentIntentRequest
     {
-        public long Amount { get; set; }
-        public string Currency { get; set; }
+        public int UserId { get; set; } // ID de l'utilisateur
+        public List<OrderBookRequest> Books { get; set; } = new(); // Liste des livres achetés
+        public string Currency { get; set; } // Devise (par exemple, "usd")
+        public long Amount { get; set; } // Montant total en centimes (Stripe utilise des centimes)
+    }
+
+    public class OrderBookRequest
+    {
+        public int Id { get; set; } // ID du livre
+        public int Quantity { get; set; } // Quantité commandée
     }
 }

@@ -40,3 +40,27 @@ CREATE TABLE writing_event(
       start_date datetime not null,
       end_date datetime
 );   
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='order_books' AND xtype='U')
+    DROP TABLE order_books;
+
+-- Supprimer la table orders si elle existe
+IF EXISTS (SELECT * FROM sysobjects WHERE name='orders' AND xtype='U')
+    DROP TABLE orders;
+
+CREATE TABLE orders (
+    orderId INT IDENTITY PRIMARY KEY,
+    userId INT NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    paymentStatus NVARCHAR(50) NOT NULL,
+    createdAt DATETIME NOT NULL DEFAULT GETDATE()
+);
+
+-- Création de la table order_books
+CREATE TABLE order_books (
+    orderBookId INT IDENTITY PRIMARY KEY,
+    orderId INT NOT NULL,
+    bookId INT NOT NULL,
+    FOREIGN KEY (orderId) REFERENCES orders(orderId) ON DELETE CASCADE,
+    FOREIGN KEY (bookId) REFERENCES books(idBook) ON DELETE CASCADE
+);
