@@ -13,6 +13,7 @@ namespace Domain
         public Users User { get; set; }
         public decimal Amount { get; set; }
         public string PaymentStatus { get; set; }
+        public string StripePaymentIntentId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public List<Book> OrderBooks { get; set; } = new();
     }

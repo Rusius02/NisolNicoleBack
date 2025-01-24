@@ -13,6 +13,7 @@ namespace Infrastructure.SqlServer.Repository.Orders
         public const string ColUserId = "UserId";
         public const string ColAmount = "Amount";
         public const string ColPaymentStatus = "PaymentStatus";
+        public const string ColStripePaymentIntentId = "StripePaymentIntentId";
         public const string ColCreatedAt = "CreatedAt";
 
         // Nom de la table pour les relations

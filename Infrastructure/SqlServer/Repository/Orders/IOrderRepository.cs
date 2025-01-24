@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.SqlServer.Repository.Orders
+﻿using Domain;
+
+namespace Infrastructure.SqlServer.Repository.Orders
 {
     public interface IOrderRepository
     {
@@ -11,5 +13,6 @@
         bool Delete(Domain.Order order);
 
         bool UpdatePaymentStatus(int orderId, string paymentStatus);
+        bool Update(Order order);
     }
 }

@@ -132,6 +132,35 @@ namespace Infrastructure.SqlServer.Repository.Orders
 
             return command.ExecuteNonQuery() > 0;
         }
+        public bool Update(Order order)
+        {
+            using var connection = Database.GetConnection();
+            connection.Open();
+
+            var command = new SqlCommand
+            {
+                Connection = connection,
+                CommandText = $@"
+            UPDATE {TableName}
+            SET 
+                {ColUserId} = @{ColUserId}, 
+                {ColAmount} = @{ColAmount}, 
+                {ColPaymentStatus} = @{ColPaymentStatus}, 
+                {ColStripePaymentIntentId} = @{ColStripePaymentIntentId}, 
+                {ColCreatedAt} = @{ColCreatedAt}
+            WHERE {ColOrderId} = @{ColOrderId}"
+            };
+
+            command.Parameters.AddWithValue("@" + ColOrderId, order.OrderId);
+            command.Parameters.AddWithValue("@" + ColUserId, order.UserId);
+            command.Parameters.AddWithValue("@" + ColAmount, order.Amount);
+            command.Parameters.AddWithValue("@" + ColPaymentStatus, order.PaymentStatus);
+            command.Parameters.AddWithValue("@" + ColStripePaymentIntentId, order.StripePaymentIntentId ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@" + ColCreatedAt, order.CreatedAt);
+
+            return command.ExecuteNonQuery() > 0;
+        }
+
 
         // Obtenir les livres associés à une commande
         public List<Book> GetBooksByOrderId(int orderId)

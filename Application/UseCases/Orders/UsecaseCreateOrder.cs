@@ -21,5 +21,17 @@ namespace Application.UseCases.Orders
             var orderFromDb = _orderRepository.Create(orderFromDto);
             return Mapper.GetInstance().Map<OutputDtoCreateOrder>(orderFromDb);
         }
+        public void Execute(int orderId, string stripePaymentIntentId)
+        {
+            var order = _orderRepository.GetOrderById(orderId);
+
+            if (order == null)
+            {
+                throw new Exception($"Order with ID {orderId} not found.");
+            }
+
+            order.StripePaymentIntentId = stripePaymentIntentId;
+            _orderRepository.Update(order);
+        }
     }
 }
