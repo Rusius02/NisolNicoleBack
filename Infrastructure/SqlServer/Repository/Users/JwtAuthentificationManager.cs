@@ -1,7 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
+
+
 
 namespace Infrastructure.SqlServer.Repository.Users
 {
@@ -9,10 +13,12 @@ namespace Infrastructure.SqlServer.Repository.Users
     {
         private readonly UsersRepository _usersRepository=new UsersRepository();
         private readonly string key;
+        public IConfiguration Configuration { get; }
 
-        public JwtAuthentificationManager(string key)
+        public JwtAuthentificationManager(string key, IConfiguration configuration)
         {
             this.key = key;
+            Configuration = configuration;
         }
         public UserProxy Authentificate(string pseudo, string password)
         {
@@ -35,8 +41,8 @@ namespace Infrastructure.SqlServer.Repository.Users
             };
 
             var tokenHandler=new JwtSecurityTokenHandler();
-            //var tokenKey = Encoding.ASCII.GetBytes(key);
-            byte[] tokenKey = GenerateRandomKeyWithMinimumSize(32); // Example key generation function
+            var secretKey = Configuration["JwtSettings:SecretKey"];
+            var tokenKey = Encoding.ASCII.GetBytes(secretKey);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -54,22 +60,6 @@ namespace Infrastructure.SqlServer.Repository.Users
             string tokenString = tokenHandler.WriteToken(token);
             userProxy.token = tokenString;
             return userProxy;
-        }
-        private static byte[] GenerateRandomKeyWithMinimumSize(int sizeInBytes)
-        {
-            // Ensure size is at least 32 bytes (256 bits)
-            if (sizeInBytes < 32)
-            {
-                throw new ArgumentException("Key size must be at least 32 bytes (256 bits).", nameof(sizeInBytes));
-            }
-
-            // Generate random key
-            byte[] key = new byte[sizeInBytes];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(key);
-            }
-            return key;
         }
     }
 }

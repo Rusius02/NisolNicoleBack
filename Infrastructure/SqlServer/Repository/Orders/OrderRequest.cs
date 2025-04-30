@@ -19,7 +19,7 @@ namespace Infrastructure.SqlServer.Repository.Orders
         // Nom de la table pour les relations
         public const string TableOrderBooks = "order_books";
         public const string ColOrderBookOrderId = "OrderId";
-        public const string ColOrderBookBookId = "BookId";
+        public const string ColOrderBookBookId = "bookId";
 
         // Requête : Insérer une commande
         public static readonly string ReqCreateOrder = $@"

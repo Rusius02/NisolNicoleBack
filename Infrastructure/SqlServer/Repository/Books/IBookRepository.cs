@@ -7,6 +7,7 @@
         List<Domain.Book> GetAll();
 
         Domain.Book GetBook(Domain.Book book);
+        Domain.Book GetBookByStripeId(string stripeId);
 
         bool Delete(Domain.Book book);
 

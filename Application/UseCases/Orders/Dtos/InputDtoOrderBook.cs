@@ -8,7 +8,7 @@ namespace Application.UseCases.Orders.Dtos
 {
     public class InputDtoOrderBook
     {
-        public int BookId { get; set; } // ID du livre
-        public int Quantity { get; set; } // Quantité commandée
+        public string StripePriceId { get; set; } 
+        public int Quantity { get; set; } 
     }
 }

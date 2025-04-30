@@ -1,6 +1,5 @@
 ﻿using Domain;
 using Infrastructure.SqlServer.Utils;
-using Microsoft.AspNetCore.Http;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -83,6 +82,22 @@ namespace Infrastructure.SqlServer.Repository.Books
             };
 
             command.Parameters.AddWithValue("@" + ColId, book.Id);
+
+            var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+            return reader.Read() ? _factory.CreateFromSqlReader(reader) : null;
+        }
+        public Book GetBookByStripeId(string stripeId)
+        {
+            using var connection = Database.GetConnection();
+            connection.Open();
+
+            var command = new SqlCommand
+            {
+                Connection = connection,
+                CommandText = ReqGetByStripeId
+            };
+
+            command.Parameters.AddWithValue("@" + ColStripeProductId, stripeId);
 
             var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
             return reader.Read() ? _factory.CreateFromSqlReader(reader) : null;

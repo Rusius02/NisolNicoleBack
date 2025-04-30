@@ -38,7 +38,7 @@
                     Amount = request.Amount / 100M, // Convert cents to dollars/euros
                     OrderBooks = request.Books.Select(b => new InputDtoOrderBook
                     {
-                        BookId = b.Id,
+                        StripePriceId = b.StripePriceId,
                         Quantity = b.Quantity
                     }).ToList(),
                     PaymentStatus = "Pending"
@@ -64,8 +64,7 @@
                 PaymentIntent paymentIntent = await service.CreateAsync(options);
 
                 // 3. Update the order with the PaymentIntent ID
-                order.StripePaymentIntentId = paymentIntent.Id;
-                //_orderRepository.Update(order);
+                _usecaseCreateOrder.Execute(order.OrderId, paymentIntent.Id, paymentIntent.Status);
 
                 // 4. Return the ClientSecret to the frontend
                 return Ok(new { ClientSecret = paymentIntent.ClientSecret });
@@ -113,14 +112,9 @@
     public class CreatePaymentIntentRequest
     {
         public int UserId { get; set; } // ID de l'utilisateur
-        public List<OrderBookRequest> Books { get; set; } = new(); // Liste des livres achetés
+        public List<InputDtoOrderBook> Books { get; set; } = new(); // Liste des livres achetés
         public string Currency { get; set; } // Devise (par exemple, "usd")
         public long Amount { get; set; } // Montant total en centimes (Stripe utilise des centimes)
     }
 
-    public class OrderBookRequest
-    {
-        public int Id { get; set; } // ID du livre
-        public int Quantity { get; set; } // Quantité commandée
-    }
 }

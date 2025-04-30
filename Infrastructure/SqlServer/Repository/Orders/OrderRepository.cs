@@ -36,7 +36,7 @@ namespace Infrastructure.SqlServer.Repository.Orders
                 order.OrderId = (int)command.ExecuteScalar();
 
                 // Associer les livres à la commande dans la table `order_books`
-                foreach (var book in order.OrderBooks)
+                foreach (var orderBook in order.OrderBooks)
                 {
                     var orderBooksCommand = new SqlCommand
                     {
@@ -45,10 +45,9 @@ namespace Infrastructure.SqlServer.Repository.Orders
                         Transaction = transaction
                     };
                     orderBooksCommand.Parameters.AddWithValue("@" + ColOrderBookOrderId, order.OrderId);
-                    orderBooksCommand.Parameters.AddWithValue("@" + ColOrderBookBookId, book.Id);
+                    orderBooksCommand.Parameters.AddWithValue("@" + ColOrderBookBookId, orderBook.BookId);
                     orderBooksCommand.ExecuteNonQuery();
                 }
-
                 transaction.Commit();
                 return order;
             }

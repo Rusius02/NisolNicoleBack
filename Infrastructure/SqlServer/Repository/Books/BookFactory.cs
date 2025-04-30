@@ -7,6 +7,7 @@ namespace Infrastructure.SqlServer.Repository.Books
     {
         public Domain.Book CreateFromSqlReader(SqlDataReader reader)
         {
+            int stripeProductIdIndex = reader.GetOrdinal(BookRepository.ColStripeProductId);
             return new Domain.Book()
             {
                 Id = reader.GetInt32(reader.GetOrdinal(BookRepository.ColId)),
@@ -14,7 +15,10 @@ namespace Infrastructure.SqlServer.Repository.Books
                 Description = reader.GetString(reader.GetOrdinal(BookRepository.ColDescription)),
                 Price = (double)reader.GetDecimal(reader.GetOrdinal(BookRepository.ColPrice)),
                 ISBN = reader.GetString(reader.GetOrdinal(BookRepository.ColISBN)),
-                CoverImagePath = reader.GetString(reader.GetOrdinal(BookRepository.ColCoverImagePath))
+                CoverImagePath = reader.GetString(reader.GetOrdinal(BookRepository.ColCoverImagePath)),
+                StripeProductId = reader.IsDBNull(stripeProductIdIndex)
+                    ? null
+                    : reader.GetString(stripeProductIdIndex)
             };
         }
     }

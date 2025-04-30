@@ -4,6 +4,7 @@ using Domain;
 using Application.UseCases.Books.Dtos;
 using Application.UseCases.WritingEvents.dtos;
 using Application.UseCases.Orders.Dtos;
+using Application.UseCases.Orders;
 
 namespace Application.Utils
 {
@@ -42,8 +43,13 @@ namespace Application.Utils
                 cfg.CreateMap<InputDtoWritingEvent, WritingEvent>();
                 cfg.CreateMap<InputDtoUpdateWritingEvent, WritingEvent>();
                 //Order
-                cfg.CreateMap<InputDtoCreateOrder, Order>();
+                cfg.CreateMap<InputDtoCreateOrderResolved, Order>()
+                .ForMember(dest => dest.OrderBooks, opt => opt.MapFrom(src => src.OrderBooks));
+
+                cfg.CreateMap<InputDtoOrderBookResolved, OrderBook>();
+
                 cfg.CreateMap<Order, OutputDtoCreateOrder>();
+
             });
             return new AutoMapper.Mapper(config);
         }

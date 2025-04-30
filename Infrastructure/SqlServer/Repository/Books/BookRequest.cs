@@ -8,15 +8,16 @@
             ColDescription = "description",
             ColISBN = "ISBN",
             ColPrice = "price",
-            ColCoverImagePath = "CoverImagePath";
+            ColCoverImagePath = "CoverImagePath",
+            ColStripeProductId = "StripeProductId";
 
         //We have all our queries here 
         //Create query which creates a database User
         public static readonly string ReqCreate = $@"
         INSERT INTO {TableName}({ColTitle}, {ColDescription}, 
-        {ColISBN},  {ColPrice}, {ColCoverImagePath})
+        {ColISBN},  {ColPrice}, {ColCoverImagePath}, {ColStripeProductId})
         OUTPUT INSERTED.{ColId}
-        VALUES(@{ColTitle}, @{ColDescription}, @{ColISBN}, @{ColPrice}, @{ColCoverImagePath})";
+        VALUES(@{ColTitle}, @{ColDescription}, @{ColISBN}, @{ColPrice}, @{ColCoverImagePath}, @{ColStripeProductId})";
 
         //This is the one that will send us all the User
         public static readonly string ReqGetAll = $@"
@@ -27,6 +28,10 @@
         SELECT * FROM {TableName}
         WHERE {ColId} = @{ColId}";
 
+        public static readonly string ReqGetByStripeId = $@"
+        SELECT * FROM {TableName}
+        WHERE {ColStripeProductId} = @{ColStripeProductId}";
+
         //Delete query which deletes the data based on the id
         public static readonly string ReqDelete = $@"
             DELETE FROM {TableName} WHERE {ColId} = @{ColId}";
@@ -35,7 +40,7 @@
         public static readonly string ReqUpdate = $@"
             UPDATE {TableName}
             SET {ColTitle} = @{ColTitle}, {ColDescription} = @{ColDescription}, 
-            {ColISBN} = @{ColISBN},{ColPrice} = @{ColPrice}, {ColCoverImagePath} = @{ColCoverImagePath}
+            {ColISBN} = @{ColISBN},{ColPrice} = @{ColPrice}, {ColCoverImagePath} = @{ColCoverImagePath}, {ColStripeProductId} = @{ColStripeProductId}
             WHERE {ColId} = @{ColId}";
 
         //This is the one that will send us all the activities based on Pseudo et Password

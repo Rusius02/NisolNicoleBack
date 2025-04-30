@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain
+﻿namespace Domain
 {
     public class Order
     {
@@ -15,6 +9,7 @@ namespace Domain
         public string PaymentStatus { get; set; }
         public string StripePaymentIntentId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public List<Book> OrderBooks { get; set; } = new();
+        public List<OrderBook> OrderBooks { get; set; } = new();
+
     }
 }

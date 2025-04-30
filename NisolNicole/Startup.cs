@@ -14,6 +14,9 @@ using Application.UseCases.NewFolder;
 using Infrastructure.Services.Contact;
 using NisolNicole.security.proxy;
 using Infrastructure.SqlServer.Repository.Orders;
+using Application.UseCases.Orders;
+using Application.UseCases.SiteTraffic;
+using Infrastructure.SqlServer.Repository.SiteTraffic;
 
 namespace NisolNicole
 {
@@ -35,6 +38,30 @@ namespace NisolNicole
             {
                 c.SwaggerDoc("v2", new OpenApiInfo { Title = "My API", Version = "v2" }); c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
                 c.MapType<IFormFile>(() => new OpenApiSchema { Type = "string", Format = "binary" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Saisis ici ton token JWT : Bearer {ton_token}"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
             });
             services.AddCors(options =>
             {
@@ -51,6 +78,7 @@ namespace NisolNicole
             services.AddSingleton<IUsersRepository, UsersRepository>();
             services.AddSingleton<IBookRepository, BookRepository>();
             services.AddSingleton<IOrderRepository, OrderRepository>();
+            services.AddSingleton<ISiteTrafficRepository, SiteTrafficRepository>();
             services.AddSingleton<IWritingEventRepository, WritingEventRepository>();
             //Add usecases
             services.AddSingleton<UseCaseCreateUser>();
@@ -59,9 +87,11 @@ namespace NisolNicole
             services.AddSingleton<UseCaseCreateBook>();
             services.AddSingleton<UseCaseDeleteBook>();
             services.AddSingleton<UseCaseListBook>();
+            services.AddSingleton<UsecaseCreateOrder>();
             services.AddSingleton<UseCaseCreateWritingEvent>();
             services.AddSingleton<UseCaseDeleteWritingEvent>();
             services.AddSingleton<UseCaseListWritingEvent>();
+            services.AddSingleton<SiteTrafficService>();
             //SMTP config
             var emailSettings = Configuration.GetSection("EmailSettings").Get<EmailSettingProxy>();
             services.AddSingleton<IEmailService>(new EmailService(
@@ -73,7 +103,8 @@ namespace NisolNicole
 
             services.AddSingleton<UseCaseContactAuthorByMail>();
             //Authentication
-            var key = "This is my secret Test key";
+            var jwtSettings = Configuration.GetSection("JwtSettings");
+            var secretKey = jwtSettings.GetValue<string>("SecretKey");
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -85,13 +116,15 @@ namespace NisolNicole
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey)),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
             });
-            services.AddSingleton<IJwtAuthentificationManager>(new JwtAuthentificationManager(key));
-            StripeConfiguration.ApiKey = "your_stripe_secret_key";
+            services.AddSingleton<IJwtAuthentificationManager>(new JwtAuthentificationManager(secretKey, Configuration));
+            var stripe = Configuration.GetSection("Stripe");
+            var secretStripeKey = stripe.GetValue<string>("SecretKey");
+            StripeConfiguration.ApiKey = secretStripeKey;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
