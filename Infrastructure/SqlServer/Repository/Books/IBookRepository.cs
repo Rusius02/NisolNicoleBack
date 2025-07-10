@@ -12,5 +12,7 @@
         bool Delete(Domain.Book book);
 
         bool Update(Domain.Book book);
+        void UpdateStock(int bookId, int newQuantity);
+        int GetStock(int bookId);
     }
 }

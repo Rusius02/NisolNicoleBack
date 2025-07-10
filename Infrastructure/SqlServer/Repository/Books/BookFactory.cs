@@ -16,6 +16,7 @@ namespace Infrastructure.SqlServer.Repository.Books
                 Price = (double)reader.GetDecimal(reader.GetOrdinal(BookRepository.ColPrice)),
                 ISBN = reader.GetString(reader.GetOrdinal(BookRepository.ColISBN)),
                 CoverImagePath = reader.GetString(reader.GetOrdinal(BookRepository.ColCoverImagePath)),
+                QuantityInStock = reader.GetInt32(reader.GetOrdinal(BookRepository.ColQuantityStock)),
                 StripeProductId = reader.IsDBNull(stripeProductIdIndex)
                     ? null
                     : reader.GetString(stripeProductIdIndex)

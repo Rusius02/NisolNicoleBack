@@ -136,5 +136,36 @@ namespace Infrastructure.SqlServer.Repository.Books
 
             return false; 
         }
+        public void UpdateStock(int bookId, int newQuantity)
+        {
+            using var connection = Database.GetConnection();
+            connection.Open();
+
+            var command = new SqlCommand
+            {
+                Connection = connection,
+                CommandText = "UPDATE dbo.Book SET QuantityInStock = @quantity WHERE IdBook = @id"
+            };
+            command.Parameters.AddWithValue("@quantity", newQuantity);
+            command.Parameters.AddWithValue("@id", bookId);
+
+            command.ExecuteNonQuery();
+        }
+
+        public int GetStock(int bookId)
+        {
+            using var connection = Database.GetConnection();
+            connection.Open();
+
+            var command = new SqlCommand
+            {
+                Connection = connection,
+                CommandText = "SELECT QuantityInStock FROM dbo.Book WHERE IdBook = @id"
+            };
+            command.Parameters.AddWithValue("@id", bookId);
+
+            var result = command.ExecuteScalar();
+            return result != null ? Convert.ToInt32(result) : 0;
+        }
     }
 }

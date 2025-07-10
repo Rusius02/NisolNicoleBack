@@ -9,6 +9,7 @@
             ColISBN = "ISBN",
             ColPrice = "price",
             ColCoverImagePath = "CoverImagePath",
+            ColQuantityStock = "QuantityInStock",
             ColStripeProductId = "StripeProductId";
 
         //We have all our queries here 
@@ -42,10 +43,18 @@
             SET {ColTitle} = @{ColTitle}, {ColDescription} = @{ColDescription}, 
             {ColISBN} = @{ColISBN},{ColPrice} = @{ColPrice}, {ColCoverImagePath} = @{ColCoverImagePath}, {ColStripeProductId} = @{ColStripeProductId}
             WHERE {ColId} = @{ColId}";
+        // The Update request which allows to modify an activity in the database
+        public static readonly string ReqUpdateStock = $@"
+            UPDATE {TableName}
+            SET {ColQuantityStock} = @{ColQuantityStock}
+            WHERE {ColId} = @{ColId}";
 
         //This is the one that will send us all the activities based on Pseudo et Password
         public static readonly string ReqGetByPseudo = $@"
         SELECT * FROM {TableName}
+        WHERE {ColTitle} = @{ColTitle}";
+        public static readonly string ReqGetStock = $@"
+        SELECT {ColQuantityStock} FROM {TableName}
         WHERE {ColTitle} = @{ColTitle}";
 
     }
