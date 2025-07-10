@@ -9,5 +9,6 @@
         public string ISBN { get; set; } = String.Empty;
         public string CoverImagePath { get; set; } = String.Empty;
         public string StripeProductId { get; set; } = String.Empty;
+        public int QuantityInStock { get; set; }
     }
 }
