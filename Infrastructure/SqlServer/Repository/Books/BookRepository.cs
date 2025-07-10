@@ -144,10 +144,10 @@ namespace Infrastructure.SqlServer.Repository.Books
             var command = new SqlCommand
             {
                 Connection = connection,
-                CommandText = "UPDATE dbo.Book SET QuantityInStock = @quantity WHERE IdBook = @id"
+                CommandText = ReqUpdateStock
             };
-            command.Parameters.AddWithValue("@quantity", newQuantity);
-            command.Parameters.AddWithValue("@id", bookId);
+            command.Parameters.AddWithValue("@" + ColQuantityStock, newQuantity);
+            command.Parameters.AddWithValue("@" + ColId, bookId);  
 
             command.ExecuteNonQuery();
         }
@@ -160,9 +160,9 @@ namespace Infrastructure.SqlServer.Repository.Books
             var command = new SqlCommand
             {
                 Connection = connection,
-                CommandText = "SELECT QuantityInStock FROM dbo.Book WHERE IdBook = @id"
+                CommandText = ReqGetStock
             };
-            command.Parameters.AddWithValue("@id", bookId);
+            command.Parameters.AddWithValue("@" + ColId, bookId);
 
             var result = command.ExecuteScalar();
             return result != null ? Convert.ToInt32(result) : 0;
