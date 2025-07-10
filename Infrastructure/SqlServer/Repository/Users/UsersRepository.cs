@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
-using Domain;
 using Infrastructure.SqlServer.Utils;
 
 namespace Infrastructure.SqlServer.Repository.Users
