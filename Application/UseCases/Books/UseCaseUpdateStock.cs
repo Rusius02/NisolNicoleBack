@@ -10,9 +10,9 @@ namespace Application.UseCases.Books
         {
             _bookRepository = bookRepository;
         }
-        public int Execute(InputDtoStock dto)
+        public void Execute(InputDtoStock dto)
         {
-            return _bookRepository.GetStock(dto.Id);
+            _bookRepository.UpdateStock(dto.Id, (int)dto.quantity);
         }
     }
 }
