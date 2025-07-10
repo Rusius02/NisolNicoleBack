@@ -20,7 +20,7 @@ namespace Infrastructure.SqlServer.Repository.Users
             this.key = key;
             Configuration = configuration;
         }
-        public UserProxy Authentificate(string pseudo, string password)
+        public UserProxy? Authentificate(string pseudo, string password)
         {
             var user = _usersRepository.GetUserByPseudo(pseudo, password);
             
@@ -33,11 +33,11 @@ namespace Infrastructure.SqlServer.Repository.Users
                 id = user.Id,
                 firstName = user.FirstName,
                 lastName = user.LastName,
-                pseudo = user.pseudo,
+                pseudo = user.Pseudo,
                 role = user.Role,
-                mail = user.mail,
+                mail = user.Mail,
                 birthDate = user.BirthDate,
-                sexe = user.sexe
+                sexe = user.Sexe
             };
 
             var tokenHandler=new JwtSecurityTokenHandler();

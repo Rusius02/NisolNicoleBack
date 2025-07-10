@@ -18,7 +18,7 @@ namespace Infrastructure.SqlServer.Repository.Users
 
             foreach (Domain.Users u in users)
             {
-                if (u.mail == email || u.pseudo == username)
+                if (u.Mail == email || u.Pseudo == username)
                 {
                     return true; // User already exists
                 }
@@ -27,13 +27,13 @@ namespace Infrastructure.SqlServer.Repository.Users
             return false; // User does not exist
         }
         //The Create method creates and returns an User
-        public Domain.Users Create(Domain.Users user)
+        public Domain.Users? Create(Domain.Users user)
         {
             /*We connect to our database*/
             using var connection = Database.GetConnection();
             List<Domain.Users> users = GetAll();
             connection.Open();
-            if (UserExists(user.mail, user.pseudo))
+            if (UserExists(user.Mail, user.Pseudo))
             {
                 return null; // User already exists, return null
             }
@@ -49,10 +49,10 @@ namespace Infrastructure.SqlServer.Repository.Users
             /*We pass the received data as an argument in our request*/
             command.Parameters.AddWithValue("@" + ColLastName, user.LastName);
             command.Parameters.AddWithValue("@" + ColFirstName, user.FirstName);
-            command.Parameters.AddWithValue("@" + ColSexe, user.sexe);
+            command.Parameters.AddWithValue("@" + ColSexe, user.Sexe);
             command.Parameters.AddWithValue("@" + ColBirthdate, user.BirthDate);
-            command.Parameters.AddWithValue("@" + ColPseudo, user.pseudo);
-            command.Parameters.AddWithValue("@" + ColMail, user.mail);
+            command.Parameters.AddWithValue("@" + ColPseudo, user.Pseudo);
+            command.Parameters.AddWithValue("@" + ColMail, user.Mail);
             command.Parameters.AddWithValue("@" + ColPassword, hashedPassword);
             command.Parameters.AddWithValue("@" + ColAddressStreet, user.AddressStreet);
             command.Parameters.AddWithValue("@" + ColAddressNumber, user.AddressNumber);
@@ -92,7 +92,7 @@ namespace Infrastructure.SqlServer.Repository.Users
         }
         
         //The GetUser method will return an User based on its idUser
-        public Domain.Users GetUser(Domain.Users users)
+        public Domain.Users? GetUser(Domain.Users users)
         {
             /*We connect to our database*/
             using var connection = Database.GetConnection();
@@ -148,10 +148,10 @@ namespace Infrastructure.SqlServer.Repository.Users
             command.Parameters.AddWithValue("@" + ColId, users.Id);
             command.Parameters.AddWithValue("@" + ColFirstName, users.FirstName);
             command.Parameters.AddWithValue("@" + ColLastName, users.LastName);
-            command.Parameters.AddWithValue("@" + ColSexe, users.sexe);
+            command.Parameters.AddWithValue("@" + ColSexe, users.Sexe);
             command.Parameters.AddWithValue("@" + ColBirthdate, users.BirthDate);
-            command.Parameters.AddWithValue("@" + ColPseudo, users.pseudo);
-            command.Parameters.AddWithValue("@" + ColMail, users.mail);
+            command.Parameters.AddWithValue("@" + ColPseudo, users.Pseudo);
+            command.Parameters.AddWithValue("@" + ColMail, users.Mail);
             command.Parameters.AddWithValue("@" + ColPassword, users.Password);
             command.Parameters.AddWithValue("@" + ColAddressStreet, users.AddressStreet);
             command.Parameters.AddWithValue("@" + ColAddressNumber, users.AddressNumber);
@@ -162,7 +162,7 @@ namespace Infrastructure.SqlServer.Repository.Users
         }
 
         //The GetUserByPseudo method will return an activity based on its pseudo and password
-        public Domain.Users GetUserByPseudo(string pseudo, string password)
+        public Domain.Users? GetUserByPseudo(string pseudo, string password)
         {
             // Connect to the database
             using var connection = Database.GetConnection();
@@ -184,7 +184,8 @@ namespace Infrastructure.SqlServer.Repository.Users
             if (reader.Read())
             {
                 // If user found, retrieve hashed password from the database
-                string hashedPasswordFromDb = reader["password"].ToString();
+                string hashedPasswordFromDb = reader["password"] as string
+                    ?? throw new InvalidOperationException("Le mot de passe est null dans la base.");
 
                 // Verify if the given password matches the hashed password from the database
                 if (BCrypt.Net.BCrypt.Verify(password, hashedPasswordFromDb))
@@ -219,7 +220,8 @@ namespace Infrastructure.SqlServer.Repository.Users
             {
                 // Retrieve user information
                 int userId = (int)reader["idUser"];
-                string currentPassword = reader["Password"].ToString();
+                string currentPassword = reader["Password"] as String
+                    ?? throw new InvalidOperationException("Mot de passe null dans la DB");
 
                 // Check if the current password is already hashed
                 if (!IsHashedPassword(currentPassword))

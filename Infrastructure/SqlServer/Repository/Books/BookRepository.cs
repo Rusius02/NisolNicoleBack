@@ -8,7 +8,7 @@ namespace Infrastructure.SqlServer.Repository.Books
     public partial class BookRepository : IBookRepository
     {
         private readonly IDomainFactory<Book> _factory = new BookFactory();
-        public Book Create(Book book)
+        public Book? Create(Book book)
         {
             using var connection = Database.GetConnection();
             List<Book> books = GetAll();
@@ -70,7 +70,7 @@ namespace Infrastructure.SqlServer.Repository.Books
             return books;
         }
 
-        public Book GetBook(Book book)
+        public Book? GetBook(Book book)
         {
             using var connection = Database.GetConnection();
             connection.Open();
@@ -86,7 +86,7 @@ namespace Infrastructure.SqlServer.Repository.Books
             var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
             return reader.Read() ? _factory.CreateFromSqlReader(reader) : null;
         }
-        public Book GetBookByStripeId(string stripeId)
+        public Book? GetBookByStripeId(string stripeId)
         {
             using var connection = Database.GetConnection();
             connection.Open();

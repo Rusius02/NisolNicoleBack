@@ -23,8 +23,8 @@ namespace Application.UseCases.Books
         public OutputDtoBook Execute(InputDtoBook dto)
         {
             var bookFromDto = Mapper.GetInstance().Map<Domain.Book>(dto);
-            Domain.Book books = _bookRepository.GetBook(bookFromDto);
-            return Mapper.GetInstance().Map<OutputDtoBook>(books);
+            Domain.Book book = _bookRepository.GetBook(bookFromDto) ?? throw new Exception("Book is null");
+            return Mapper.GetInstance().Map<OutputDtoBook>(book);
         }
     }
 }

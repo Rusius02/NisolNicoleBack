@@ -1,4 +1,7 @@
-﻿using Domain;
+﻿using Application.UseCases.Books.Dtos;
+using Application.UseCases.SiteTraffic.dtos;
+using Application.Utils;
+using Domain;
 using Infrastructure.SqlServer.Repository.SiteTraffic;
 
 namespace Application.UseCases.SiteTraffic
@@ -12,15 +15,28 @@ namespace Application.UseCases.SiteTraffic
             _repository = repository;
         }
 
-        public async Task RegisterVisitAsync(string? ipAddress)
+        public SiteVisitDto RegisterVisit(string? ipAddress)
         {
-            var visit = new SiteVisit { IpAddress = ipAddress };
-            await _repository.AddVisitAsync(visit);
+            var visit = new SiteVisit
+            {
+                IpAddress = ipAddress,
+                VisitedAt = DateTime.UtcNow
+            };
+
+            var created = _repository.Create(visit);
+
+            return Mapper.GetInstance().Map<SiteVisitDto>(created);
         }
 
-        public async Task<int> GetTotalVisitsAsync()
+        public List<SiteVisitDto> GetAllVisits()
         {
-            return await _repository.GetVisitCountAsync();
+            List<SiteVisit> visits = _repository.GetAll();
+            return Mapper.GetInstance().Map<List<SiteVisitDto>>(visits);
+        }
+
+        public int GetTotalVisits()
+        {
+            return _repository.GetAll().Count;
         }
     }
 }

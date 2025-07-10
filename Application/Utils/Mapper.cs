@@ -5,12 +5,13 @@ using Application.UseCases.Books.Dtos;
 using Application.UseCases.WritingEvents.dtos;
 using Application.UseCases.Orders.Dtos;
 using Application.UseCases.Orders;
+using Application.UseCases.SiteTraffic.dtos;
 
 namespace Application.Utils
 {
     public class Mapper
     {
-        private static AutoMapper.Mapper _instance;
+        private static AutoMapper.Mapper _instance = null!;
 
         public static AutoMapper.Mapper GetInstance()
         {
@@ -49,6 +50,8 @@ namespace Application.Utils
                 cfg.CreateMap<InputDtoOrderBookResolved, OrderBook>();
 
                 cfg.CreateMap<Order, OutputDtoCreateOrder>();
+                //SIteVisit
+                cfg.CreateMap<SiteVisit, SiteVisitDto>();
 
             });
             return new AutoMapper.Mapper(config);

@@ -3,24 +3,24 @@
     public class Users
     {
         public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string sexe { get; set; }
+        public string FirstName { get; set; } = String.Empty;
+        public string LastName { get; set; } = String.Empty;
+        public string Sexe { get; set; } = String.Empty;
         public DateTime BirthDate { get; set; }
-        public string mail { get; set; }
+        public string Mail { get; set; } = String.Empty;    
         
-        public string pseudo { get; set; }
-        public string Password { get; set; }
+        public string Pseudo { get; set; } = String.Empty;
+        public string Password { get; set; } = String.Empty;
         
-        public string Role { get; set; }
+        public string Role { get; set; } = String.Empty;
 
-        public string AddressStreet { get; set; }
+        public string AddressStreet { get; set; } = String.Empty;
 
-        public string AddressNumber { get; set; }
+        public string AddressNumber { get; set; } = String.Empty;
 
-        public string AddressCity { get; set; }
-        public string AddressZip { get; set; }
-        public string AddressCountry { get; set; }
+        public string AddressCity { get; set; } = String.Empty;
+        public string AddressZip { get; set; } = String.Empty;
+        public string AddressCountry { get; set; } = String.Empty;
 
     }
 }

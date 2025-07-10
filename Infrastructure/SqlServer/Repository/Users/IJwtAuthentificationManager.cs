@@ -2,6 +2,6 @@
 {
     public interface IJwtAuthentificationManager
     {
-        UserProxy Authentificate(string pseudo, string password);
+        UserProxy? Authentificate(string pseudo, string password);
     }
 }

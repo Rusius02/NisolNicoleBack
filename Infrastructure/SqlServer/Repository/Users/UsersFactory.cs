@@ -13,10 +13,10 @@ namespace Infrastructure.SqlServer.Repository.Users
                 Id = reader.GetInt32(reader.GetOrdinal(UsersRepository.ColId)),
                 LastName = reader.GetString(reader.GetOrdinal(UsersRepository.ColLastName)),
                 FirstName = reader.GetString(reader.GetOrdinal(UsersRepository.ColFirstName)),
-                sexe = reader.GetString(reader.GetOrdinal(UsersRepository.ColSexe)),
+                Sexe = reader.GetString(reader.GetOrdinal(UsersRepository.ColSexe)),
                 BirthDate = reader.GetDateTime(reader.GetOrdinal(UsersRepository.ColBirthdate)),
-                mail = reader.GetString(reader.GetOrdinal(UsersRepository.ColMail)),
-                pseudo = reader.GetString(reader.GetOrdinal(UsersRepository.ColPseudo)),
+                Mail = reader.GetString(reader.GetOrdinal(UsersRepository.ColMail)),
+                Pseudo = reader.GetString(reader.GetOrdinal(UsersRepository.ColPseudo)),
                 Password = reader.GetString(reader.GetOrdinal(UsersRepository.ColPassword)),
                 Role = reader.GetString(reader.GetOrdinal(UsersRepository.ColRole))
                     

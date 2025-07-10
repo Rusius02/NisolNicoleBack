@@ -80,7 +80,9 @@
         public async Task<IActionResult> StripeWebhook()
         {
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
-            string endpointSecret = _configuration["Stripe:WebhookSecret"]; // Clé secrète du webhook
+            string endpointSecret = _configuration["Stripe:WebhookSecret"]
+                ?? throw new InvalidOperationException("Stripe Webhook Secret is missing.");
+
 
             try
             {
@@ -113,7 +115,7 @@
     {
         public int UserId { get; set; } // ID de l'utilisateur
         public List<InputDtoOrderBook> Books { get; set; } = new(); // Liste des livres achetés
-        public string Currency { get; set; } // Devise (par exemple, "usd")
+        public string Currency { get; set; } = string.Empty;// Devise (par exemple, "usd")
         public long Amount { get; set; } // Montant total en centimes (Stripe utilise des centimes)
     }
 

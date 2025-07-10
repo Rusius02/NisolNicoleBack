@@ -1,4 +1,8 @@
-﻿using Application.UseCases.SiteTraffic;
+﻿using Application.UseCases.Books;
+using Application.UseCases.Books.Dtos;
+using Application.UseCases.SiteTraffic;
+using Application.UseCases.SiteTraffic.dtos;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace NisolNicole.Controllers
@@ -15,18 +19,16 @@ namespace NisolNicole.Controllers
         }
 
         [HttpPost("visit")]
-        public async Task<IActionResult> RegisterVisit()
+        public ActionResult<SiteVisitDto> RegisterVisit()
         {
             var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            await _visitService.RegisterVisitAsync(ip);
-            return Ok();
+            return StatusCode(201, _visitService.RegisterVisit(ip));
         }
 
         [HttpGet("count")]
-        public async Task<IActionResult> GetVisitCount()
+        public ActionResult<List<SiteVisitDto>> GetVisitCount()
         {
-            var count = await _visitService.GetTotalVisitsAsync();
-            return Ok(new { visits = count });
+            return StatusCode(200, _visitService.GetAllVisits());
         }
     }
 }
