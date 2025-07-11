@@ -13,7 +13,7 @@ namespace Infrastructure.SqlServer.Repository.Books
                 Id = reader.GetInt32(reader.GetOrdinal(BookRepository.ColId)),
                 Title = reader.GetString(reader.GetOrdinal(BookRepository.ColTitle)),
                 Description = reader.GetString(reader.GetOrdinal(BookRepository.ColDescription)),
-                Price = (double)reader.GetDecimal(reader.GetOrdinal(BookRepository.ColPrice)),
+                Price = reader.GetDouble(reader.GetOrdinal(BookRepository.ColPrice)),
                 ISBN = reader.GetString(reader.GetOrdinal(BookRepository.ColISBN)),
                 CoverImagePath = reader.GetString(reader.GetOrdinal(BookRepository.ColCoverImagePath)),
                 QuantityInStock = reader.GetInt32(reader.GetOrdinal(BookRepository.ColQuantityStock)),
