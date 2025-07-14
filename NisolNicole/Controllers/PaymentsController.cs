@@ -14,11 +14,13 @@
     {
         private readonly IConfiguration _configuration;
         private readonly UsecaseCreateOrder _usecaseCreateOrder;
+        private readonly UsecaseModifyStatus _usecaseModifyStatus;
 
-        public PaymentsController(IConfiguration configuration, UsecaseCreateOrder usecaseCreateOrder)
+        public PaymentsController(IConfiguration configuration, UsecaseCreateOrder usecaseCreateOrder, UsecaseModifyStatus usecaseModifyStatus)
         {
             _configuration = configuration;
             _usecaseCreateOrder = usecaseCreateOrder;
+            _usecaseModifyStatus = usecaseModifyStatus;
         }
 
         [HttpPost("create-payment-intent")]
@@ -83,7 +85,6 @@
             string endpointSecret = _configuration["Stripe:WebhookSecret"]
                 ?? throw new InvalidOperationException("Stripe Webhook Secret is missing.");
 
-
             try
             {
                 var stripeEvent = EventUtility.ConstructEvent(
@@ -92,18 +93,22 @@
                     endpointSecret
                 );
 
-                if (stripeEvent.Type == Events.PaymentIntentSucceeded)
+                if (stripeEvent.Type == Events.PaymentIntentSucceeded ||
+                     stripeEvent.Type == Events.PaymentIntentProcessing ||
+                     stripeEvent.Type == Events.PaymentIntentCanceled)
                 {
                     var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+                    if (paymentIntent == null || paymentIntent.Metadata == null)
+                        return BadRequest("Invalid PaymentIntent or missing metadata.");
 
-                    // Gérez la logique post-paiement ici, par exemple :
-                    // - Marquez une commande comme payée dans la base de données
-                    // - Envoyez un email de confirmation
+                    if (!paymentIntent.Metadata.TryGetValue("orderId", out var orderIdString) || !int.TryParse(orderIdString, out var orderId))
+                        return BadRequest("Invalid or missing orderId in metadata.");
 
+                    await _usecaseModifyStatus.ExecuteAsync(orderId, paymentIntent.Status);
                     return Ok();
                 }
 
-                return BadRequest();
+                return Ok(); // OK même si on ignore l'événement
             }
             catch (StripeException e)
             {
