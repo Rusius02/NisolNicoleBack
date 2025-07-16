@@ -19,13 +19,13 @@ namespace Infrastructure.SqlServer.Repository.ShippingInfos
             };
             command.Parameters.AddWithValue("@" + ColFullName, shippingInfos.FullName);
             command.Parameters.AddWithValue("@" + ColMail, shippingInfos.Email);
+            command.Parameters.AddWithValue("@" + ColPhoneNumber, shippingInfos.PhoneNumber);
             command.Parameters.AddWithValue("@" + ColAddressStreet, shippingInfos.AddressLine1);
             command.Parameters.AddWithValue("@" + ColAddressNumber, shippingInfos.AddressLine2);
             command.Parameters.AddWithValue("@" + ColAddressZip, shippingInfos.PostalCode);
             command.Parameters.AddWithValue("@" + ColAddressCity, shippingInfos.City);
             command.Parameters.AddWithValue("@" + ColAddressCountry, shippingInfos.Country);
             command.Parameters.AddWithValue("@" + ColOrderId, shippingInfos.OrderId);
-            command.Parameters.AddWithValue("@" + ColMail, shippingInfos.PhoneNumber);
             command.Parameters.AddWithValue("@" + ColShippingMethod, shippingInfos.ShippingMethod);
 
             shippingInfos.Id = (int)command.ExecuteScalar();

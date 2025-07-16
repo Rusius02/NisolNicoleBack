@@ -11,6 +11,7 @@
          ColAddressStreet = "address_street",
          ColAddressCountry = "address_country",
          ColMail = "mail",
+         ColPhoneNumber = "phone_number",
          ColShippingMethod = "ShippingMethod",
          ColOrderId = "order_id";
 
@@ -18,10 +19,10 @@
         //Create query which creates a database User
         public static readonly string ReqCreate = $@"
         INSERT INTO {TableName}({ColFullName}, {ColAddressNumber}, {ColAddressCity}, {ColAddressZip}, {ColAddressStreet}, {ColAddressCountry}, {ColMail}, {ColShippingMethod}, 
-        {ColOrderId})
+        {ColOrderId}, {ColPhoneNumber})
         OUTPUT INSERTED.{ColId}
         VALUES(@{ColFullName}, @{ColAddressNumber}, @{ColAddressCity}, @{ColAddressZip}, @{ColAddressStreet}, @{ColAddressCountry}, @{ColMail}, @{ColShippingMethod}, 
-        @{ColOrderId})";
+        @{ColOrderId}, @{ColPhoneNumber})";
 
         //This is the one that will send us all the User
         public static readonly string ReqGetAll = $@"

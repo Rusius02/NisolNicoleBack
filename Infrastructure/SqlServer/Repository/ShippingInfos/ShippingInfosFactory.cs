@@ -17,7 +17,7 @@ namespace Infrastructure.SqlServer.Repository.ShippingInfos
                 PostalCode = reader.GetString(reader.GetOrdinal(ShippingInfosRepository.ColAddressZip)),
                 Country = reader.GetString(reader.GetOrdinal(ShippingInfosRepository.ColAddressCountry)),
                 Email = reader.GetString(reader.GetOrdinal(ShippingInfosRepository.ColMail)),
-                PhoneNumber = reader.GetString(reader.GetOrdinal(ShippingInfosRepository.ColMail)),
+                PhoneNumber = reader.GetString(reader.GetOrdinal(ShippingInfosRepository.ColPhoneNumber)),
                 OrderId = reader.GetInt32(reader.GetOrdinal(ShippingInfosRepository.ColOrderId)),
                 ShippingMethod = reader.GetString(reader.GetOrdinal(ShippingInfosRepository.ColShippingMethod))
 

@@ -114,7 +114,7 @@ namespace Infrastructure
                 entity.Property(v => v.VisitedAt).HasColumnName("visited_at");
                 entity.Property(v => v.IpAddress).HasColumnName("ip_address");
             });
-            // Users mapping
+            // Shipping infos mapping
             modelBuilder.Entity<ShippingInfos>(entity =>
             {
                 entity.HasKey(u => u.Id);
@@ -122,7 +122,7 @@ namespace Infrastructure
                 entity.Property(u => u.OrderId).HasColumnName("order_id");
                 entity.Property(u => u.FullName).HasColumnName("full_name");
                 entity.Property(u => u.Email).HasColumnName("mail");
-                entity.Property(u => u.PhoneNumber).HasColumnName("pseudo");
+                entity.Property(u => u.PhoneNumber).HasColumnName("phone_number");
                 entity.Property(u => u.PostalCode).HasColumnName("address_street");
                 entity.Property(u => u.AddressLine1).HasColumnName("address_number");
                 entity.Property(u => u.AddressLine2).HasColumnName("address_city");

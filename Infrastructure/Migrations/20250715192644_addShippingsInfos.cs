@@ -21,7 +21,7 @@ namespace Infrastructure.Migrations
                     address_zip = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     address_street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     address_country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    pseudo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    phone_number = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     mail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShippingMethod = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
