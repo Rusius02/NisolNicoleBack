@@ -13,6 +13,7 @@ namespace Infrastructure
         public DbSet<OrderBook> OrderBooks { get; set; } = null!;
         public DbSet<SiteVisit> SiteVisits { get; set; } = null!;
         public DbSet<WritingEvent> WritingEvents { get; set; } = null!;
+        public DbSet<ShippingInfos> ShippingInfos { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,8 +22,9 @@ namespace Infrastructure
             modelBuilder.Entity<Book>().ToTable("book");
             modelBuilder.Entity<Order>().ToTable("orders");
             modelBuilder.Entity<OrderBook>().ToTable("order_books");
-            modelBuilder.Entity<SiteVisit>().ToTable("site_visits"); // nom fictif
+            modelBuilder.Entity<SiteVisit>().ToTable("site_visits"); 
             modelBuilder.Entity<WritingEvent>().ToTable("writing_event");
+            modelBuilder.Entity<ShippingInfos>().ToTable("shipping_infos");
 
             // Users mapping
             modelBuilder.Entity<Users>(entity =>
@@ -111,6 +113,24 @@ namespace Infrastructure
                 entity.Property(v => v.Id).HasColumnName("id");
                 entity.Property(v => v.VisitedAt).HasColumnName("visited_at");
                 entity.Property(v => v.IpAddress).HasColumnName("ip_address");
+            });
+            // Users mapping
+            modelBuilder.Entity<ShippingInfos>(entity =>
+            {
+                entity.HasKey(u => u.Id);
+                entity.Property(u => u.Id).HasColumnName("id");
+                entity.Property(u => u.OrderId).HasColumnName("order_id");
+                entity.Property(u => u.FullName).HasColumnName("full_name");
+                entity.Property(u => u.Email).HasColumnName("mail");
+                entity.Property(u => u.PhoneNumber).HasColumnName("pseudo");
+                entity.Property(u => u.PostalCode).HasColumnName("address_street");
+                entity.Property(u => u.AddressLine1).HasColumnName("address_number");
+                entity.Property(u => u.AddressLine2).HasColumnName("address_city");
+                entity.Property(u => u.City).HasColumnName("address_zip");
+                entity.Property(u => u.Country).HasColumnName("address_country");
+                entity.HasOne<Order>() 
+                .WithOne()
+                .HasForeignKey<ShippingInfos>(s => s.OrderId);
             });
 
             base.OnModelCreating(modelBuilder);

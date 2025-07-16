@@ -9,7 +9,7 @@ INSERT INTO dbo.users (last_name, first_name, sexe, birthdate, mail, pseudo, pas
 
 
 -- ========== dbo_writing_event ==========
-INSERT INTO dbo_writing_event (name, description, theme, start_date, end_date) VALUES
+INSERT INTO dbo.writing_event (name, description, theme, start_date, end_date) VALUES
 ('Concours nouvelle romantique original N°1', 'Ecrivez une nouvelle abordant le thème de l''amour, une belle histoire d''amour qui ferait rêver les plus solitaires d''entre nous ou une histoire d''amour passionnelle mais destructrice. A vos plumes!', 'Romantisme', '2024-06-07 00:00:00', '2024-09-07 00:00:00'),
 ('Concours nouvelle romantique 1', 'Ecrivez une nouvelle abordant le thème de l''amour, une belle histoire d''amour qui ferait rêver les plus solitaires d''entre nous ou une histoire d''amour passionnelle mais destructrice. A vos plumes!', 'Romantisme', '2024-06-07 15:54:33', '2024-09-07 15:54:33'),
 ('Concours nouvelle romantique 2', 'Ecrivez une nouvelle abordant le thème de l''amour, une belle histoire d''amour qui ferait rêver les plus solitaires d''entre nous ou une histoire d''amour passionnelle mais destructrice. A vos plumes!', 'Romantisme', '2024-06-07 15:54:33', '2024-09-07 15:54:33'),
@@ -30,7 +30,7 @@ INSERT INTO dbo.book (name, description, price, isbn, CoverImagePath, StripeProd
 ('Au bord de l''estran', 'Ces six histoires vous emmènent au bord de la mer. Là où des choses un peu étranges vous surprendront.', 10.00, '978-2-8083-3065-7', '/images/covers/ac9e3565-a1f3-4eeb-95dd-79726ee8607d.jpeg', NULL);
 
 -- ========== dbo_orders ==========
-INSERT INTO dbo_orders (userId, amount, paymentStatus, createdAt, StripePaymentIntentId) VALUES
+INSERT INTO dbo.orders (userId, amount, paymentStatus, createdAt, StripePaymentIntentId) VALUES
 (3, 0.02, 'Pending', '2025-04-30 14:54:51', NULL),
 (3, 0.02, 'Pending', '2025-04-30 15:20:55', NULL),
 (3, 0.02, 'Pending', '2025-04-30 15:22:05', NULL),

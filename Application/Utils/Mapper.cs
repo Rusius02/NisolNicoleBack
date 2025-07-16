@@ -6,6 +6,7 @@ using Application.UseCases.WritingEvents.dtos;
 using Application.UseCases.Orders.Dtos;
 using Application.UseCases.Orders;
 using Application.UseCases.SiteTraffic.dtos;
+using Application.UseCases.Shipping.dtos;
 
 namespace Application.Utils
 {
@@ -52,6 +53,9 @@ namespace Application.Utils
                 cfg.CreateMap<Order, OutputDtoCreateOrder>();
                 //SIteVisit
                 cfg.CreateMap<SiteVisit, SiteVisitDto>();
+                //ShippingInfos
+                cfg.CreateMap<InputShippingInfosDto, ShippingInfos>();
+                cfg.CreateMap<ShippingInfos, OutputDtoShippingInfos>();
 
             });
             return new AutoMapper.Mapper(config);
