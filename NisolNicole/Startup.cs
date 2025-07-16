@@ -17,6 +17,8 @@ using Infrastructure.SqlServer.Repository.Orders;
 using Application.UseCases.Orders;
 using Application.UseCases.SiteTraffic;
 using Infrastructure.SqlServer.Repository.SiteTraffic;
+using Application.UseCases.Shipping;
+using Infrastructure.SqlServer.Repository.ShippingInfos;
 
 namespace NisolNicole
 {
@@ -80,6 +82,7 @@ namespace NisolNicole
             services.AddSingleton<IOrderRepository, OrderRepository>();
             services.AddSingleton<ISiteTrafficRepository, SiteTrafficRepository>();
             services.AddSingleton<IWritingEventRepository, WritingEventRepository>();
+            services.AddSingleton<ShippingInfosIRepository, ShippingInfosRepository>();
             //Add usecases
             services.AddSingleton<UseCaseCreateUser>();
             services.AddSingleton<UseCaseDeleteUser>();
@@ -94,6 +97,7 @@ namespace NisolNicole
             services.AddSingleton<UseCaseDeleteWritingEvent>();
             services.AddSingleton<UseCaseListWritingEvent>();
             services.AddSingleton<SiteTrafficService>();
+            services.AddSingleton<UsecaseCreateShippingInfos>();
             //SMTP config
             var emailSettings = Configuration.GetSection("EmailSettings").Get<EmailSettingProxy>();
             services.AddSingleton<IEmailService>(new EmailService(
