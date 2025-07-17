@@ -6,6 +6,8 @@
     using Microsoft.AspNetCore.Mvc;
     using Stripe;
     using System.Threading.Tasks;
+    using Application.UseCases.Shipping.dtos;
+    using Application.UseCases.Shipping;
 
     [ApiController]
     [Authorize]
@@ -15,12 +17,15 @@
         private readonly IConfiguration _configuration;
         private readonly UsecaseCreateOrder _usecaseCreateOrder;
         private readonly UsecaseModifyStatus _usecaseModifyStatus;
+        private readonly UsecaseCreateShippingInfos _usecaseCreateShippingsInfos;
 
-        public PaymentsController(IConfiguration configuration, UsecaseCreateOrder usecaseCreateOrder, UsecaseModifyStatus usecaseModifyStatus)
+        public PaymentsController(IConfiguration configuration, UsecaseCreateOrder usecaseCreateOrder,
+            UsecaseModifyStatus usecaseModifyStatus, UsecaseCreateShippingInfos usecaseCreateShippingsInfos)
         {
             _configuration = configuration;
             _usecaseCreateOrder = usecaseCreateOrder;
             _usecaseModifyStatus = usecaseModifyStatus;
+            _usecaseCreateShippingsInfos = usecaseCreateShippingsInfos;
         }
 
         [HttpPost("create-payment-intent")]
@@ -46,7 +51,9 @@
                     PaymentStatus = "Pending"
                 });
 
-                // 2. Create a PaymentIntent in Stripe
+                //2. Create the shipping infos
+                _usecaseCreateShippingsInfos.Execute(mapToShippingDto(request, order));
+                // 3. Create a PaymentIntent in Stripe
                 var options = new PaymentIntentCreateOptions
                 {
                     Amount = request.Amount,
@@ -56,19 +63,19 @@
                         Enabled = true,
                     },
                     Metadata = new Dictionary<string, string>
-            {
-                { "OrderId", order.OrderId.ToString() },
-                { "UserId", order.UserId.ToString() }
-            }
+                    {
+                        { "OrderId", order.OrderId.ToString() },
+                        { "UserId", order.UserId.ToString() }
+                    }
                 };
 
                 var service = new PaymentIntentService();
                 PaymentIntent paymentIntent = await service.CreateAsync(options);
 
-                // 3. Update the order with the PaymentIntent ID
+                // 4. Update the order with the PaymentIntent ID
                 _usecaseCreateOrder.Execute(order.OrderId, paymentIntent.Id, paymentIntent.Status);
 
-                // 4. Return the ClientSecret to the frontend
+                // 5. Return the ClientSecret to the frontend
                 return Ok(new { ClientSecret = paymentIntent.ClientSecret });
             }
             catch (StripeException ex)
@@ -115,6 +122,26 @@
                 return BadRequest(new { Error = e.Message });
             }
         }
+        private InputShippingInfosDto mapToShippingDto(CreatePaymentIntentRequest request, OutputDtoCreateOrder order)
+        {
+            if (request == null)
+            {
+                throw new Exception("Missing order and shipping infos");
+            } else
+            {
+                InputShippingInfosDto dto = new InputShippingInfosDto();
+                dto.OrderId = order.OrderId;
+                dto.FullName = request.FullName;
+                dto.PhoneNumber = request.PhoneNumber;
+                dto.Email = request.Email;
+                dto.AddressLine1 = request.AddressLine1;
+                dto.AddressLine2 = request.AddressLine2;
+                dto.PostalCode = request.PostalCode;
+                dto.City = request.City;
+                dto.Country = request.Country;
+                return dto;
+            }
+        }
     }
     public class CreatePaymentIntentRequest
     {
@@ -122,6 +149,14 @@
         public List<InputDtoOrderBook> Books { get; set; } = new(); // Liste des livres achetés
         public string Currency { get; set; } = string.Empty;// Devise (par exemple, "usd")
         public long Amount { get; set; } // Montant total en centimes (Stripe utilise des centimes)
-    }
+        public string FullName { get; set; } = string.Empty;
+        public string AddressLine1 { get; set; } = string.Empty;
+        public string AddressLine2 { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
+        public string Country { get; set; } = string.Empty;
 
+        public string PhoneNumber { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+    }
 }

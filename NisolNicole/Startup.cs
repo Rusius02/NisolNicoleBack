@@ -93,6 +93,7 @@ namespace NisolNicole
             services.AddSingleton<UseCaseUpdateStock>();
             services.AddSingleton<UseCaseGetStock>();
             services.AddSingleton<UsecaseCreateOrder>();
+            services.AddSingleton<UsecaseModifyStatus>();
             services.AddSingleton<UseCaseCreateWritingEvent>();
             services.AddSingleton<UseCaseDeleteWritingEvent>();
             services.AddSingleton<UseCaseListWritingEvent>();

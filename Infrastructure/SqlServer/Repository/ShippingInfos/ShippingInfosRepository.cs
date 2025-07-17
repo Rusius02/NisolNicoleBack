@@ -26,7 +26,8 @@ namespace Infrastructure.SqlServer.Repository.ShippingInfos
             command.Parameters.AddWithValue("@" + ColAddressCity, shippingInfos.City);
             command.Parameters.AddWithValue("@" + ColAddressCountry, shippingInfos.Country);
             command.Parameters.AddWithValue("@" + ColOrderId, shippingInfos.OrderId);
-            command.Parameters.AddWithValue("@" + ColShippingMethod, shippingInfos.ShippingMethod);
+            command.Parameters.AddWithValue("@" + ColShippingMethod,
+                shippingInfos.ShippingMethod ?? (object)DBNull.Value);
 
             shippingInfos.Id = (int)command.ExecuteScalar();
 
