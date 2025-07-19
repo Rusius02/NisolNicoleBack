@@ -10,7 +10,6 @@
     using Application.UseCases.Shipping;
 
     [ApiController]
-    [Authorize]
     [Route("api/[controller]")]
     public class PaymentsController : ControllerBase
     {
@@ -29,6 +28,7 @@
         }
 
         [HttpPost("create-payment-intent")]
+        [Authorize]
         public async Task<IActionResult> CreatePaymentIntent([FromBody] CreatePaymentIntentRequest request)
         {
             if (request.Amount <= 0)
@@ -108,7 +108,7 @@
                     if (paymentIntent == null || paymentIntent.Metadata == null)
                         return BadRequest("Invalid PaymentIntent or missing metadata.");
 
-                    if (!paymentIntent.Metadata.TryGetValue("orderId", out var orderIdString) || !int.TryParse(orderIdString, out var orderId))
+                    if (!paymentIntent.Metadata.TryGetValue("OrderId", out var orderIdString) || !int.TryParse(orderIdString, out var orderId))
                         return BadRequest("Invalid or missing orderId in metadata.");
 
                     await _usecaseModifyStatus.ExecuteAsync(orderId, paymentIntent.Status);

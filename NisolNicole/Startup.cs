@@ -99,6 +99,7 @@ namespace NisolNicole
             services.AddSingleton<UseCaseListWritingEvent>();
             services.AddSingleton<SiteTrafficService>();
             services.AddSingleton<UsecaseCreateShippingInfos>();
+            services.AddSingleton<UsecaseGetEstimateShippingPrice>();
             //SMTP config
             var emailSettings = Configuration.GetSection("EmailSettings").Get<EmailSettingProxy>();
             services.AddSingleton<IEmailService>(new EmailService(
