@@ -1,6 +1,7 @@
 ﻿using Domain;
 using Infrastructure.SqlServer.Repository.Books;
 using Infrastructure.SqlServer.Utils;
+using MailKit.Search;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -113,6 +114,29 @@ namespace Infrastructure.SqlServer.Repository.Orders
 
             var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
             return reader.Read() ? _factory.CreateFromSqlReader(reader) : null;
+        }
+
+        public List<Order> GetOrderByUserId(int userID)
+        {
+            using var connection = Database.GetConnection();
+            var orders = new List<Order>();
+            connection.Open();
+
+            var command = new SqlCommand
+            {
+                Connection = connection,
+                CommandText = ReqGetOrdersByUserId
+            };
+
+            command.Parameters.AddWithValue("@" + ColUserId, userID);
+            var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (reader.Read())
+            {
+                orders.Add(_factory.CreateFromSqlReader(reader));
+            }
+
+            return orders;
         }
 
         // Mettre à jour le statut de paiement d'une commande

@@ -9,6 +9,7 @@ namespace Infrastructure.SqlServer.Repository.Orders
         List<Domain.Order> GetAll();
 
         Domain.Order GetOrderById(int id);
+        List<Order> GetOrderByUserId(int userID);
 
         bool Delete(Domain.Order order);
 

@@ -4,7 +4,7 @@
 INSERT INTO dbo.users (last_name, first_name, sexe, birthdate, mail, pseudo, password, role) VALUES
 ('Lievens', 'Justin', 'M', '2001-03-16', 'Justin123@gmail.com', 'TheGamers', '$2a$10$eXbhMVll8lQ7aYhEqNFiaeCYZrg9YKYq/pPCcbeE4T/qPWgJhlnn.', 'admin'),
 ('Vandeputte', 'Jeremy', 'M', '2000-08-19', 'Jeremy456@gmail.com', 'JeremyV', '$2a$10$1E6TIAmY1hPiBEkSQSbfr.OReEHJSLJh0f6Or5Dn8FrfznPemE912', 'user'),
-('Stievenart', 'Adrien', 'M', '1997-10-02', 'Adrien123@gmail.com', 'Rusius', '$2a$10$A6Gap9k1CufpNlHbnf3//e6X9pgU63JfkEf5uKfBrImGkD66LLx5y', 'user'),
+('Stievenart', 'Adrien', 'M', '1997-10-02', 'Adrien123@gmail.com', 'Rusius', '$2a$10$A6Gap9k1CufpNlHbnf3//e6X9pgU63JfkEf5uKfBrImGkD66LLx5y', 'admin'),
 ('Trufelli', 'Aleandro', 'M', '1997-10-02', 'Aleandro123@gmail.com', 'Aleandro', '$2a$10$S8fCCsauufcU7AcNJrFfUOSzHNPtBLVQ6.G.vBnYTWzF/pHa8jTEO', 'user');
 
 

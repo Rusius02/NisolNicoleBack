@@ -51,6 +51,7 @@ namespace Application.Utils
                 cfg.CreateMap<InputDtoOrderBookResolved, OrderBook>();
 
                 cfg.CreateMap<Order, OutputDtoCreateOrder>();
+                cfg.CreateMap<Order, OutputDtoOrder>();
                 //SIteVisit
                 cfg.CreateMap<SiteVisit, SiteVisitDto>();
                 //ShippingInfos

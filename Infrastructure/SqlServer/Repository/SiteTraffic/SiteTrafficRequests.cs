@@ -2,10 +2,10 @@
 {
     partial class SiteTrafficRepository
     {
-        public const string TableName = "siteVisit",
-           ColId = "idSiteVisit",
-           ColDate = "visitDate",
-           ColIP= "IPAdress";
+        public const string TableName = "site_visits",
+           ColId = "id",
+           ColDate = "visited_at",
+           ColIP= "ip_address"; 
 
         //We have all our queries here 
         //Create query which creates a database User
