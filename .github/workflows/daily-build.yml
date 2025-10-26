@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adrien Stiévenart | Portfolio</title>
+  <link rel="stylesheet" href="./css/styles.css">
+  <script defer src="./js/lang.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top left, #0b0b0b, #111);
+      color: #f3f3f3;
+      overflow-x: hidden;
+    }
+    header {
+      text-align: center;
+      padding: 5rem 1rem 3rem;
+      position: relative;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px rgba(255,255,255,0.2);
+    }
+    header p {
+      color: #aaa;
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    section {
+      padding: 4rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #7b2ff7, #00c6ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+    .project-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(255,255,255,0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(255,255,255,0.1);
+    }
+    .project-card h3 {
+      margin-top: 0;
+      font-size: 1.4rem;
+      color: #fff;
+    }
+    .project-card p {
+      color: #bbb;
+      font-size: 0.95rem;
+    }
+    .contact {
+      text-align: center;
+    }
+    .contact p {
+      color: #ccc;
+      margin-bottom: 1.5rem;
+    }
+    .contact a {
+      display: inline-block;
+      background: linear-gradient(90deg, #7b2ff7, #00c6ff);
+      color: white;
+      padding: 0.8rem 1.6rem;
+      border-radius: 2rem;
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+    }
+    .contact a:hover {
+      opacity: 0.8;
+    }
+    .language-switcher {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 1rem;
+      padding: 0.4rem 0.7rem;
+      display: flex;
+      gap: 0.5rem;
+      z-index: 999;
+    }
+    .language-switcher button {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+    .language-switcher button:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="language-switcher">
+  <button data-lang="fr">🇫🇷</button>
+  <button data-lang="en">🇬🇧</button>
+  <button data-lang="es">🇪🇸</button>
+</div>
+
+
+  <header>
+    <h1 data-translate="hero_title"></h1>
+    <p data-translate="hero_subtitle"></p>
+  </header>
+
+  <section id="about">
+    <h2 data-translate="about_title"></h2>
+    <p data-translate="about_text"></p>
+    <h3 data-translate="skills_title"></h3>
+    <p data-translate="skills_list"></p>
+  </section>
+
+  <section id="projects">
+    <h2 data-translate="projects_title"></h2>
+    <div class="projects">
+      <div class="project-card">
+        <h3 data-translate="project_nicole_title"></h3>
+        <p data-translate="project_nicole_desc"></p>
+      </div>
+      <div class="project-card">
+        <h3 data-translate="project_justgaming_title"></h3>
+        <p data-translate="project_justgaming_desc"></p>
+      </div>
+      <div class="project-card">
+        <h3 data-translate="project_chronocraft_title"></h3>
+        <p data-translate="project_chronocraft_desc"></p>
+      </div>
+      <div class="project-card">
+        <h3 data-translate="project_mystery_title"></h3>
+        <p data-translate="project_mystery_desc"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <h2 data-translate="contact_title"></h2>
+    <p data-translate="contact_text"></p>
+    <a href="mailto:adrien@example.com" data-translate="contact_button"></a>
+  </section>
+</body>
+</html>
+name: Daily Build
+
+# Déclenchement du workflow
+on:
+  # Planification quotidienne à 2h du matin UTC (3h en France)
+  schedule:
+    - cron: "0 2 * * *"
+  # Permet de lancer le workflow manuellement depuis GitHub
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and Test Solution
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1 : Récupère le code depuis ton dépôt
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Étape 2 : Installe le SDK .NET (version 8 recommandée)
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      # Étape 3 : Restaure les dépendances de tous les projets
+      - name: Restore dependencies
+        run: dotnet restore NisolNicole.sln
+
+      # Étape 4 : Compile la solution complète
+      - name: Build solution
+        run: dotnet build NisolNicole.sln --configuration Release --no-restore
+
+      # Étape 5 : Exécute les tests unitaires
+      - name: Run tests
+        run: dotnet test NisolNicole.sln --no-build --verbosity normal
+
+      # Étape 6 (optionnelle) : Upload des artefacts du build
+      # Si tu veux garder les binaires du build, décommente ce bloc
+      # - name: Upload build artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: NisolNicole-build
+      #     path: |
+      #       **/bin/Release/
