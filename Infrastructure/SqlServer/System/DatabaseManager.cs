@@ -28,7 +28,7 @@ namespace Infrastructure.SqlServer.System
         {
             var script =
                 File.ReadAllText(
-                    @"D:\RiderProjects\NisolNicole\Infrastructure\SqlServer\Ressources\Data.sql");
+                    @"C:\Users\Adrien\OneDrive\Dev\NisolNicoleBack\Infrastructure\SqlServer\Ressources\Data.sql");
 
             //Connection to the database
             var connection = Database.GetConnection();

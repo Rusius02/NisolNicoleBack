@@ -12,7 +12,7 @@ namespace Tests.Usecases.Visits
         public void RegisterVisit_ShouldReturnSiteVisitDto_WithValidIp()
         {
             // Arrange
-            var mockRepo = new Mock<SiteTrafficRepository>();
+            var mockRepo = new Mock<ISiteTrafficRepository>();
             mockRepo.Setup(r => r.Create(It.IsAny<SiteVisit>())).Returns(new SiteVisit { IpAddress = "127.0.0.1" });
 
             var service = new SiteTrafficService(mockRepo.Object);
